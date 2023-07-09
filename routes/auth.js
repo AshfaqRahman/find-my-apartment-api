@@ -7,7 +7,6 @@ const router = express.Router();
     * @swagger
     * /auth/register:
     *      post:
-    *           summary: Use to request all customers
     *           requestBody:
     *              required: true
     *              content:
@@ -17,6 +16,8 @@ const router = express.Router();
     *                    example:
     *                     username: "John Doe"
     *                     password: "secretpassword"
+    *                     email: "xyz@abc.p"
+    *                     phone: "1234567890"
     * 
     *           responses:
     *               '201':
@@ -29,12 +30,8 @@ const router = express.Router();
     *
 */
 router.post('/register', (req, res) => {
-    console.log(req.body)
-    let params = req.body;
-    let username = params.username;
+    let username = req.body.username;
     let password = req.body.password;
-    console.log(username);
-    console.log(password);
     let id = 1;
     res.send({
         id: id,
@@ -43,6 +40,62 @@ router.post('/register', (req, res) => {
       
 })
 
+/**
+ * @swagger
+ * /auth/login:
+ *     post:
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ *                  example:
+ *                    email: "xyz@abc.p"
+ *                    password: "secretpassword"
+ * 
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ * 
+ * 
+ */
+
+router.post('/login', (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    let token = "token";
+    return res.send({
+        token: token,
+    });
+})
+
+
+/**
+ * @swagger
+ * /auth/logout:
+ *     post:
+ * 
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ * 
+ * 
+ */
+
+router.post('/logout', (req, res) => {
+    return res.send({
+        message: "successfully logged out",
+    });
+})
 
 
 module.exports = router;
