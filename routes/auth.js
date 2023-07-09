@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
+// create swagger authentication tag
+/**
+ * @swagger
+ * tags:
+ *  name: Authentication
+ *  description: User authentication
+ */
 
 
 /** 
     * @swagger
     * /auth/register:
     *      post:
+    *           summary: Request for register
+    *           tags: [Authentication]
     *           requestBody:
     *              required: true
     *              content:
@@ -44,6 +53,8 @@ router.post('/register', (req, res) => {
  * @swagger
  * /auth/login:
  *     post:
+ *         summary: Request for login
+ *         tags: [Authentication]
  *         requestBody:
  *             required: true
  *             content:
@@ -79,7 +90,8 @@ router.post('/login', (req, res) => {
  * @swagger
  * /auth/logout:
  *     post:
- * 
+ *         summary: Request for logout
+ *         tags: [Authentication]
  *         responses:
  *           '200':
  *                  description: A successful response

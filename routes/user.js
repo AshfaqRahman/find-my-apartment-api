@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
+/**
+ * @swagger
+ * tags:
+ *  name: User
+ *  description: user profile endpoints
+ */
 
 
 /** 
     * @swagger
     * /user/profile:
     *      get:
+    *           summary: Request for user profile
+    *           tags: [User]
     *           responses:
     *               '200':
     *                   description: A successful response
@@ -36,6 +44,8 @@ router.get('/profile', (req, res) => {
  * @swagger
  * /user/profile:
  *     patch:
+ *         summary: Request for update user profile
+ *         tags: [User]
  *         requestBody:
  *             required: true
  *             content:
@@ -80,6 +90,8 @@ router.patch('/profile', (req, res) => {
  * @swagger
  * /user/change-password:
  *     patch:
+ *         summary: Request for change password
+ *         tags: [User]
  *         requestBody:
  *             required: true
  *             content:

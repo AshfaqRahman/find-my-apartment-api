@@ -15,8 +15,8 @@ const options = {
     "definition": {
         "openapi": "3.1.0",
         "info": {
-            "title": "home finder",
-            "description": "find your apartment",
+            "title": "Find your apartment",
+            "description": "API endpoints",
             "version": "1.0.0"
         },
         "server": [
