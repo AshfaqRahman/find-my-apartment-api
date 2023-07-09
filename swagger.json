@@ -1,38 +1,16 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "title": "API",
-        "description": "API",
-        "version": "1.0.0"
-    },
-    "host": "localhost:8000",
-    "basePath": "/",
-    "tags": [
-        {
-            "name": "API",
-            "description": "API"
-        }
-    ],
-    "schemes": [
-        "http"
-    ],
-    "paths": {
-        "/api": {
-            "get": {
-                "tags": [
-                    "API"
-                ],
-                "summary": "API",
-                "description": "API",
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK"
-                    }
-                }
+    "definition": {
+        "openapi": "3.1.0",
+        "info": {
+            "title": "home finder",
+            "description": "find your apartment",
+            "version": "1.0.0"
+        },
+        "server": [
+            {
+                "url": "http://localhost:8000"
             }
-        }
-    }
+        ]
+    },
+    "apis": ["./routes/*.js"]
 }
