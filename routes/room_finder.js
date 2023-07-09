@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const savedSearches = require('../db/room_find_search')
 
 /**
  * @swagger
@@ -228,7 +229,7 @@ router.post('/save-search', (req, res) => {
 
 /**
  * @swagger
- * /room_finder/saved-searches:
+ * /room_finder/saved-searches/all:
  *  get:
  *     summary:
  *     tags: [Room Finder]
@@ -242,43 +243,34 @@ router.post('/save-search', (req, res) => {
  *                          type: array
  */
 
+router.get('/saved-searches/all', (req, res) => {
+    res.send(saveSearches).status(200);
+})
+
+/**
+ * @swagger
+ * /room_finder/saved-searches:
+ *  get:
+ *     summary:
+ *     tags: [Room Finder]
+ *     description: Get saved searches by search id
+ *     parameters:
+ *       - name: search_id
+ *         in: query
+ *         description: Search id
+ *         schema:
+ *           type: string
+ *     responses:
+ *          '200':
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ */
+
 router.get('/saved-searches', (req, res) => {
-    res.send([
-        {
-            "search_id": "unique id",
-            "location": {
-                "latitude": 23.8103,
-                "longitude": 90.4125,
-                "address": "Dhaka"
-            },
-            "max_budget": 20000,
-            "min_budget": 10000,
-            "gender": "Male",
-            "person_in_room": 1,
-            "washroom": 2,
-            "no_of_residents": 1,
-            "no_of_living_rooms": 1,
-            "facilities": ["wifi", "parking"],
-            "advantages": ["near to university", "near to market"]
-        },
-        {
-            "search_id": "unique id 2",
-            "location": {
-                "latitude": 23.8103,
-                "longitude": 90.4125,
-                "address": "Dhaka"
-            },
-            "max_budget": 20000,
-            "min_budget": 10000,
-            "gender": "Male",
-            "person_in_room": 1,
-            "washroom": 2,
-            "no_of_residents": 1,
-            "no_of_living_rooms": 1,
-            "facilities": ["wifi", "parking"],
-            "advantages": ["near to university", "near to market"]
-        }
-    ])
+    res.send(savedSearches[0]).status(200);
 })
 
 module.exports = router;

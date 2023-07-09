@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const apartments = require("../db/apartment");
+const users = require("../db/user");
 
 /**
  * @swagger
@@ -27,15 +29,7 @@ const router = express.Router();
 */
 router.get('/profile', (req, res) => {
     res.send(
-        {
-            "id": 1,
-            "username": "john_doe",
-            "email": "john@example.com",
-            "first_name": "John",
-            "last_name": "Doe",
-            "phone_number": "+1234567890",
-            "address": "123 Main St, Example City"
-        }
+        users[0]
     )
       
 })
@@ -74,15 +68,7 @@ router.get('/profile', (req, res) => {
 
 router.patch('/profile', (req, res) => {
     return res.send(
-        {
-            id: 1,
-            username: "john_doe",
-            email: "john@example.com",
-            first_name: "John",
-            last_name: "Doe",
-            phone_number: "+1234567890",
-            address: "123 Main St, Example City"
-        }
+        users[0]
     );
 })
 
@@ -120,5 +106,26 @@ router.patch('/change-password', (req, res) => {
         message: "Password changed successfully"
     });
 })
+
+/**
+ * @swagger
+ * /user/wishlist:
+ *     get:
+ *         summary: Request for get wishlist
+ *         tags: [User]
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: array
+ */
+
+
+router.get('/wishlist', (req, res) => {
+    res.send(apartments);
+})
+
 
 module.exports = router;
