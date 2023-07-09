@@ -4,6 +4,9 @@ const express = require('express');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
 // const swaggerDocument = require('./swagger.json');
 
 const router = require('./routes/routes');
