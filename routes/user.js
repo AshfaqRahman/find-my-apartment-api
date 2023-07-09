@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const apartments = require("../db/apartment");
 const users = require("../db/user");
+const myPreferenceRouter = require('./my-preference');
 
 /**
  * @swagger
@@ -9,6 +10,8 @@ const users = require("../db/user");
  *  name: User
  *  description: user profile endpoints
  */
+
+router.use('/my-preference', myPreferenceRouter);
 
 
 /** 

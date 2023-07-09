@@ -225,11 +225,6 @@ router.post('/add', (req, res) => {
  *     tags: [Apartments]
  *     description: Retrieve apartments based on specified search filters
  *     parameters:
- *       - name: type
- *         in: query
- *         description: Apartment type (e.g., family, bachelor, sublet)
- *         schema:
- *           type: string
  *       - name: price_min
  *         in: query
  *         description: Minimum price range in BDT
@@ -287,7 +282,6 @@ router.post('/add', (req, res) => {
 
 router.get("/search", (req, res) => {
     // get query parameters
-    let type = req.query.type;
     let price_min = req.query.price_min;
     let price_max = req.query.price_max;
     let beds = req.query.beds;
