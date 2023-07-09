@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const authRouter = require('./auth');
-
+const apartmentRouter = require('./apartment');
 
 
 router.use('/auth', authRouter);
+router.use('/apartments', apartmentRouter);
 
-
-router.get('/ap')
 module.exports = router;
