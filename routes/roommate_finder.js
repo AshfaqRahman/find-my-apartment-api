@@ -25,6 +25,7 @@ const router = express.Router();
  *             location: "BUET"
  *             washroom: 1
  *             persons_in_room: 3
+ *             gender: "Male"
  *             min_budget: 3
  *             max_budget: 3000
  *             no_of_residents: 3
@@ -46,6 +47,7 @@ router.post('/post', (req, res) => {
     let location = req.body.location;
     let washroom = req.body.washroom;
     let persons_in_room = req.body.persons_in_room;
+    let gender = req.body.gender;
     let min_budget = req.body.min_budget;
     let max_budget = req.body.max_budget;
     let no_of_residents = req.body.no_of_residents;

@@ -20,7 +20,14 @@ const router = express.Router();
  *         in: query
  *         description: Location
  *         schema:
- *           type: string
+ *           type: object
+ *           properties:
+ *             latitude:
+ *               type: number
+ *             longitude:
+ *               type: number
+ *             address:
+ *               type: string
  *       - name: max_budget
  *         in: query
  *         description: Maximum budget
@@ -90,7 +97,11 @@ router.get('/search', (req, res) => {
         [
             {
                 "id": 1,
-                "location": "Dhaka",
+                "location": {
+                    "latitude": 23.8103,
+                    "longitude": 90.4125,
+                    "address": "Dhaka"
+                },
                 "cost": 20000,
                 "gender": "Male",
                 "person_in_room": 1,
@@ -103,7 +114,11 @@ router.get('/search', (req, res) => {
             },
             {
                 "id": 2,
-                "location": "Dhaka",
+                "location": {
+                    "latitude": 23.8103,
+                    "longitude": 90.4125,
+                    "address": "Dhaka"
+                },
                 "cost": 20000,
                 "gender": "Male",
                 "person_in_room": 1,
@@ -154,5 +169,116 @@ router.post('/contact', (req, res) => {
     }).status(200);
 })
 
+
+/**
+ * @swagger
+ * /room_finder/save-search:
+ *  post:
+ *     summary:
+ *     tags: [Room Finder]
+ *     description:
+ *     requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                 schema:
+ *                      type: object
+ *                 example:
+ *                      search_id: "unique id"
+ *                      location: {
+ *                         latitude: 23.8103,
+ *                         longitude: 90.4125,
+ *                         address: "Dhaka"
+ *                      }    
+ *                      max_budget: 20000
+ *                      min_budget: 10000
+ *                      gender: Male
+ *                      person_in_room: 1
+ *                      washroom: 2
+ *                      no_of_residents: 1
+ *                      no_of_living_rooms: 1
+ *                      facilities: ["wifi", "parking"]
+ *                      advantages: ["near to university", "near to market"]
+ *     responses:
+ *          '200':
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ */
+
+router.post('/save-search', (req, res) => {
+    let search_id = req.body.search_id;
+    let location = req.body.location;
+    let max_budget = req.body.max_budget;
+    let min_budget = req.body.min_budget;
+    let gender = req.body.gender;
+    let person_in_room = req.body.person_in_room;
+    let washroom = req.body.washroom;
+    let no_of_residents = req.body.no_of_residents;
+    let no_of_living_rooms = req.body.no_of_living_rooms;
+    let facilities = req.body.facilities;
+    let advantages = req.body.advantages;
+    res.send({
+        "message" : `Search id ${search_id} saved successfully`
+    }).status(200);
+})
+
+
+/**
+ * @swagger
+ * /room_finder/saved-searches:
+ *  get:
+ *     summary:
+ *     tags: [Room Finder]
+ *     description:
+ *     responses:
+ *          '200':
+ *              description: OK
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ */
+
+router.get('/saved-searches', (req, res) => {
+    res.send([
+        {
+            "search_id": "unique id",
+            "location": {
+                "latitude": 23.8103,
+                "longitude": 90.4125,
+                "address": "Dhaka"
+            },
+            "max_budget": 20000,
+            "min_budget": 10000,
+            "gender": "Male",
+            "person_in_room": 1,
+            "washroom": 2,
+            "no_of_residents": 1,
+            "no_of_living_rooms": 1,
+            "facilities": ["wifi", "parking"],
+            "advantages": ["near to university", "near to market"]
+        },
+        {
+            "search_id": "unique id 2",
+            "location": {
+                "latitude": 23.8103,
+                "longitude": 90.4125,
+                "address": "Dhaka"
+            },
+            "max_budget": 20000,
+            "min_budget": 10000,
+            "gender": "Male",
+            "person_in_room": 1,
+            "washroom": 2,
+            "no_of_residents": 1,
+            "no_of_living_rooms": 1,
+            "facilities": ["wifi", "parking"],
+            "advantages": ["near to university", "near to market"]
+        }
+    ])
+})
 
 module.exports = router;

@@ -41,6 +41,7 @@ const router = express.Router();
 router.post('/register', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
+    
     let id = 1;
     res.send({
         id: id,
