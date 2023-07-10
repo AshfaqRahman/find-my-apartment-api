@@ -14,7 +14,7 @@ const router = express.Router();
  * /user/my-preference:
  *   post:
  *     summary: save your preference
- *     tags: [User]
+ *     tags: [My Preference]
  *     requestBody:
  *       required: true
  *       content:
@@ -77,7 +77,7 @@ router.post("/", (req, res) => {
  * /user/my-preference:
  *   get:
  *     summary: save your preference
- *     tags: [User]
+ *     tags: [My Preference]
  *     responses:
  *       '200':
  *         description: Successful response with matching apartments

@@ -3,6 +3,7 @@ const router = express.Router();
 const apartments = require("../db/apartment");
 const users = require("../db/user");
 const myPreferenceRouter = require('./my-preference');
+const wishlistRouter = require('./wishlist');
 
 /**
  * @swagger
@@ -12,6 +13,7 @@ const myPreferenceRouter = require('./my-preference');
  */
 
 router.use('/my-preference', myPreferenceRouter);
+router.use('/wishlist', wishlistRouter);
 
 
 /** 
@@ -34,7 +36,6 @@ router.get('/profile', (req, res) => {
     res.send(
         users[0]
     )
-      
 })
 
 /**
@@ -112,9 +113,9 @@ router.patch('/change-password', (req, res) => {
 
 /**
  * @swagger
- * /user/wishlist:
+ * /user/my-apartments:
  *     get:
- *         summary: Request for get wishlist
+ *         summary: Request for get my apartments
  *         tags: [User]
  *         responses:
  *           '200':
@@ -125,10 +126,11 @@ router.patch('/change-password', (req, res) => {
  *                type: array
  */
 
-
-router.get('/wishlist', (req, res) => {
-    res.send(apartments);
+router.get('/my-apartments', (req, res) => {
+    return res.send(apartments);
 })
+
+
 
 
 module.exports = router;
