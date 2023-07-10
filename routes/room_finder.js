@@ -102,31 +102,30 @@ router.get('/search', (req, res) => {
 
 /**
  * @swagger
- * /room_finder/contact:
- *  post:
- *     summary: 
+ * /room_finder/contact/{post_id}:
+ *   get:
+ *     summary: Contact the owner of a room
  *     tags: [Room Finder]
- *     description:
- *     requestBody:
- *          required: true
- *          content:
- *              application/json:
- *                 schema:
- *                      type: object
- *                 example:
- *                      post_id: 1
- *
+ *     parameters:
+ *       - in: path
+ *         name: post_id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the post to contact the owner
  *     responses:
- *          '200':
- *              description: OK
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
-*/
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
 
-router.post('/contact', (req, res) => {
-    let post_id = req.body.post_id;
+
+
+router.get('/contact/:post_id', (req, res) => {
+    let post_id = req.params.post_id;
     res.send({
         "user_id": 1,
         "name": "John doe",
@@ -209,31 +208,33 @@ router.post('/save-search', (req, res) => {
 router.get('/saved-searches/all', (req, res) => {
     res.send(saveSearches).status(200);
 })
-
 /**
  * @swagger
- * /room_finder/saved-searches:
- *  get:
- *     summary:
+ * /room_finder/saved-searches/{search_id}:
+ *   get:
+ *     summary: Get saved searches by search ID
  *     tags: [Room Finder]
- *     description: Get saved searches by search id
  *     parameters:
  *       - name: search_id
- *         in: query
- *         description: Search id
+ *         in: path
+ *         description: Search ID
  *         schema:
  *           type: string
+ *         required: true
  *     responses:
- *          '200':
- *              description: OK
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
+ *       '200':
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
  */
 
-router.get('/saved-searches', (req, res) => {
+router.get('/saved-searches/:search_id', (req, res) => {
+    const searchId = req.params.search_id;
+    // Implement the logic to retrieve saved searches based on the searchId
     res.send(savedSearches[0]).status(200);
-})
+});
+
 
 module.exports = router;

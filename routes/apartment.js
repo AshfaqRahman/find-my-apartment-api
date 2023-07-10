@@ -471,32 +471,34 @@ router.get("/saved-searches/all", (req, res) => {
 })
 
 /**
- * @swagger
- * /apartments/saved-searches:
- *   get:
- *     summary: Search for apartments
- *     tags: [Apartments]
- *     description: Retrieve apartments based on specified search filters
- *     parameters:
- *       - name: search_id
- *         in: query
- *         description: Search id
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Successful response with matching apartments
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- */
- 
+* @swagger
+* /apartments/saved-searches/{search_id}:
+*   get:
+*     summary: Search for apartments
+*     tags: [Apartments]
+*     description: Retrieve apartments based on specified search filters
+*     parameters:
+*       - name: search_id
+*         in: path
+*         description: Search ID
+*         schema:
+*           type: string
+*         required: true
+*     responses:
+*       '200':
+*         description: Successful response with matching apartments
+*         content:
+*           application/json:
+*             schema:
+*               type: array
+*/
 
-router.get("/saved-searches", (req, res) => {
-    res.send(savedSearches[0]).status(200);
-})
 
+router.get("/saved-searches/:search_id", (req, res) => {
+   const searchId = req.params.search_id;
+   // Implement the logic to retrieve apartments based on the searchId
+   res.send(savedSearches[0]).status(200);
+});
 
 
 /**

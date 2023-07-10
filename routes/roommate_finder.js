@@ -80,19 +80,18 @@ router.post('/post', (req, res) => {
 router.get("/post/my/all", (req, res) => {
     res.send(posts)
 })
-
 /**
  * @swagger
- * /roommate_finder/post/my:
+ * /roommate_finder/post/my/{post_id}:
  *   get:
  *     summary: Get a post
  *     tags: [Roommate Finder]
- *     description: Get a post of mine
+ *     description: Get a specific post
  *     parameters:
  *       - name: post_id
- *         in: query
+ *         in: path
  *         required: true
- *         description: Post id
+ *         description: Post ID
  *         schema:
  *           type: string
  *     responses:
@@ -104,9 +103,12 @@ router.get("/post/my/all", (req, res) => {
  *               type: object
  */
 
-router.get("/post/my", (req, res) => {
-    res.send(posts[0])
-})
+router.get("/post/my/:post_id", (req, res) => {
+    const postId = req.params.post_id;
+    // Implement the logic to retrieve the post based on the postId
+    res.send(posts[0]);
+});
+
 
 
 /**
