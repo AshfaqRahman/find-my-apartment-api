@@ -5,42 +5,57 @@ const apartments = require("../db/apartment");
 /**
  * @swagger
  * tags:
- *  name: Recomendation
- *  description: recomendation endpoints
+ *  name: Recommendation
+ *  description: Recommendation endpoints
  */
-
 
 /**
  * @swagger
- * /recomendation:
+ * /recommendation:
  *     get:
- *         summary: Request for add apartment to wishlist
- *         tags: [Recomendation]
+ *         summary: Request for recommend apartments
+ *         tags: [Recommendation]
  *         parameters:
  *           - in: query
- *             name: criteria
+ *             name: recent_search
  *             schema:
- *               type: object
- *               default: {
- *                 recent_search: true,
- *                 wishlist: true,
- *                 preference: true,
- *                 recently_viewed: false,
- *               }
+ *               type: boolean
+ *               default: true
  *             required: true
- *             description: recomendation based on criteria
+ *             description: Include recent search in recommendation
+ *           - in: query
+ *             name: wishlist
+ *             schema:
+ *               type: boolean
+ *               default: true
+ *             required: true
+ *             description: Include wishlist items in recommendation
+ *           - in: query
+ *             name: preference
+ *             schema:
+ *               type: boolean
+ *               default: true
+ *             required: true
+ *             description: Include user preferences in recommendation
+ *           - in: query
+ *             name: recently_viewed
+ *             schema:
+ *               type: boolean
+ *               default: false
+ *             required: true
+ *             description: Include recently viewed items in recommendation
  *           - in: query
  *             name: page
  *             schema:
  *               type: integer
  *               default: 1
- *             description: page number
+ *             description: Page number
  *           - in: query
  *             name: limit
  *             schema:
  *               type: integer
  *               default: 10
- *             description: page limit
+ *             description: Page limit
  *         responses:
  *           '200':
  *                  description: A successful response
@@ -50,11 +65,11 @@ const apartments = require("../db/apartment");
  *                type: array
  */
 
-
 router.get('/', (req, res) => {
-    const criteria = req.query.criteria;
+    const { recent_search, wishlist, preference, recently_viewed } = req.query;
+    // Use the individual criteria parameters in your recommendation logic
     res.send(apartments);
-})
+});
 
 
 module.exports = router;
