@@ -108,32 +108,40 @@ router.get('/all', (req, res) => {
     res.send(apartments);
 })
 
-/** 
-    * @swagger
-    * /apartments:
-    *      get:
-    *           summary: Request for apartments
-    *           tags: [Apartments]
-    *           description: Retrieve an apartment
-    *           parameters:
-    *               - name: id
-    *                 in: query
-    *                 description: Apartment ID
-    *                 schema:
-    *                   type: integer
-    *
-    *           responses:
-    *               '200':
-    *                   description: OK
-    *                   content:
-    *                       application/json:
-    *                           schema:
-    *                               type: object
-    *                                  
-    *
+/**
+* @swagger
+* /apartments/{apartmentId}:
+*   get:
+*     summary: Request for an apartment
+*     tags: [Apartments]
+*     description: Retrieve an apartment by ID
+*     parameters:
+*       - name: apartmentId
+*         in: path
+*         description: Apartment ID
+*         required: true
+*         schema:
+*           type: integer
+*     responses:
+*       '200':
+*         description: OK
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*       '404':
+*         description: Apartment not found
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties:
+*                 error:
+*                   type: string
 */
 
-router.get('/', (req, res) => {
+router.get('/:apartmentId', (req, res) => {
+    const apartmentId = req.params.apartmentId;
     res.send(
         apartments[0]
     ).status(200);
@@ -548,32 +556,36 @@ router.patch('/', (req, res) => {
 
 /**
  * @swagger
- * /apartments:
- *     delete:
- *         summary: Request for add apartment to wishlist
- *         tags: [Apartments]
- *         parameters:
- *           - in: query
- *             name: apartment_id
+ * /apartments/{apartmentId}:
+ *   delete:
+ *     summary: Request to delete an apartment
+ *     tags: [Apartments]
+ *     parameters:
+ *       - in: path
+ *         name: apartmentId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Apartment ID
+ *     responses:
+ *       '200':
+ *         description: Successful response
+ *         content:
+ *           application/json:
  *             schema:
- *               type: integer
- *             required: true
- *             description: apartment id
- *         responses:
- *           '200':
- *                  description: A successful response
- *           content:
- *              application/json:
- *               schema:
- *                type: object
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
 
-router.delete('/', (req, res) => {
-    let apartmentId = req.body.apartment_id;
-    res.send({
-        message: "successfully removed your apartment"
-    })
-})
-
+router.delete('/:apartmentId', (req, res) => {
+    const apartmentId = req.params.apartmentId;
+    // Perform the deletion logic for the apartment with the provided apartmentId
+    
+    res.status(200).json({
+        message: "Successfully removed the apartment"
+    });
+});
 
 module.exports = router;
