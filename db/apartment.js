@@ -17,7 +17,6 @@ apartments = [
             street: "Road 1",
             house_number: "1"
         },
-        owner_user_id: 1,
         facilities: ["wifi", "parking"],
         star_points: ["star_point1", "star_point2"]
     },
@@ -39,7 +38,6 @@ apartments = [
             street: "Road 1",
             house_number: "1"
         },
-        owner_user_id: 1,
         facilities: ["wifi", "parking"],
         star_points: ["star_point1", "star_point2"]
     },

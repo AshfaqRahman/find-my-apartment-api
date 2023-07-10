@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const posts = require('../db/post')
 
 /**
  * @swagger
@@ -60,5 +61,122 @@ router.post('/post', (req, res) => {
     }).status(200);
 })
 
+/**
+ * @swagger
+ * /roommate_finder/post/my/all:
+ *   get:
+ *     summary: Get all posts
+ *     tags: [Roommate Finder]
+ *     description: Get all posts of mine
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ */
 
+router.get("/post/my/all", (req, res) => {
+    res.send(posts)
+})
+
+/**
+ * @swagger
+ * /roommate_finder/post/my:
+ *   get:
+ *     summary: Get a post
+ *     tags: [Roommate Finder]
+ *     description: Get a post of mine
+ *     parameters:
+ *       - name: post_id
+ *         in: query
+ *         required: true
+ *         description: Post id
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
+
+router.get("/post/my", (req, res) => {
+    res.send(posts[0])
+})
+
+
+/**
+ * @swagger
+ * /roommate_finder/post:
+ *     patch:
+ *         summary: Request for update post
+ *         tags: [Roommate Finder]
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ *                  example:
+ *                     post_id: 1
+ *                     location: "BUET"
+ *                     washroom: 1
+ *                     persons_in_room: 3
+ *                     gender: "Male"
+ *                     min_budget: 3
+ *                     max_budget: 3000
+ *                     no_of_residents: 3
+ *                     no_of_living_rooms: 1
+ *                     facilities: ["wifi", "parking"]
+ *                     advantages: ["near to university", "near to market"]
+ *                     description: "This is a good apartment"
+ * 
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ */
+
+router.patch('/post', (req, res) => {
+    return res.send(
+        posts[0]
+    );
+})
+
+
+/**
+ * @swagger
+ * /roommate_finder/post:
+ *     delete:
+ *         summary: Request for add apartment to wishlist
+ *         tags: [Roommate Finder]
+ *         parameters:
+ *           - in: query
+ *             name: post_id
+ *             schema:
+ *               type: integer
+ *             required: true
+ *             description: apartment id
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ */
+
+router.delete('/post', (req, res) => {
+    let postID = req.body.post_id;
+    res.send({
+        message: "successfully removed your post"
+    })
+})
 module.exports = router;

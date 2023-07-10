@@ -61,9 +61,6 @@ const savedSearches = require("../db/apartment-search");
  *             house_number:
  *               type: string
  *               description: House number
- *         owner_user_id:
- *           type: integer
- *           description: ID of the apartment owner user
  *         star_points:
  *           type: array
  *           items:
@@ -158,7 +155,7 @@ router.get('/', (req, res) => {
     *                           type: "family"
     *                           images: ["image1", "image2"]
     *                           blueprints: ["blueprint1", "blueprint2"]
-    *                           floor: "1000"
+    *                           floor: "2"
     *                           area_sqft: 234
     *                           bedroom: 3
     *                           washroom: 2
@@ -173,11 +170,8 @@ router.get('/', (req, res) => {
     *                           }
     *                           zone: "Dhaka"
     *                           area: "Dhaka"
-    *                           owner_user_id: 1
     *                           facilities: ["facility1", "facility2"]
     *                           description: "description"
-    *                           email: "email"
-    *                           phone: "phone"
     *                           star_points: ["star_point1", "star_point2"]
     *
     *           responses:
@@ -204,11 +198,8 @@ router.post('/add', (req, res) => {
         "location": req.body.location,
         "zone": req.body.zone,
         "area": req.body.area,
-        "owner_user_id": req.body.owner_user_id,
         "facilities": req.body.facilities,
         "description": req.body.description,
-        "email": req.body.email,
-        "phone": req.body.phone,
         "star_points": req.body.star_points
     }
     res.send({
@@ -496,6 +487,92 @@ router.get("/saved-searches/all", (req, res) => {
 
 router.get("/saved-searches", (req, res) => {
     res.send(savedSearches[0]).status(200);
+})
+
+
+
+/**
+ * @swagger
+ * /apartments:
+ *     patch:
+ *         summary: Request for update apartment
+ *         tags: [Apartments]
+ *         requestBody:
+ *             required: true
+ *             content:
+ *                application/json:
+ *                  schema:
+ *                     type: object
+ *                  example:
+ *                     apartment_id: 1
+ *                     type: "family"
+ *                     images: ["image1", "image2"]
+ *                     blueprints: ["blueprint1", "blueprint2"]
+ *                     floor: 2
+ *                     area_sqft: 234
+ *                     rent: 10000
+ *                     bedroom: 2
+ *                     washroom: 2
+ *                     area: "Mirpur"
+ *                     zone: "Dhaka"
+ *                     location: {
+ *                        division: "Dhaka",
+ *                        district: "Dhaka",
+ *                        street: "Dhaka",
+ *                        house_number: "Dhaka",
+ *                        latitude: 23.8103,
+ *                        longitude: 90.4125  *                     }
+ *                     facilities: ["wifi", "parking"]
+ *                     star_points: ["nearby_school", "nearby_hospital"]
+ *
+
+ * 
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ * 
+ * 
+ * 
+ */
+
+router.patch('/', (req, res) => {
+    return res.send(
+        apartments[0]
+    );
+})
+
+
+/**
+ * @swagger
+ * /apartments:
+ *     delete:
+ *         summary: Request for add apartment to wishlist
+ *         tags: [Apartments]
+ *         parameters:
+ *           - in: query
+ *             name: apartment_id
+ *             schema:
+ *               type: integer
+ *             required: true
+ *             description: apartment id
+ *         responses:
+ *           '200':
+ *                  description: A successful response
+ *           content:
+ *              application/json:
+ *               schema:
+ *                type: object
+ */
+
+router.delete('/', (req, res) => {
+    let apartmentId = req.body.apartment_id;
+    res.send({
+        message: "successfully removed your apartment"
+    })
 })
 
 
