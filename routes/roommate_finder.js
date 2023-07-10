@@ -163,7 +163,7 @@ router.patch('/post', (req, res) => {
  *             schema:
  *               type: integer
  *             required: true
- *             description: apartment id
+ *             description: post id
  *         responses:
  *           '200':
  *                  description: A successful response

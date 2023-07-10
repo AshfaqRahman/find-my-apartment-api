@@ -33,16 +33,17 @@ router.get('/', (req, res) => {
 /**
  * @swagger
  * /user/wishlist/add:
- *     get:
+ *     post:
  *         summary: Request for add apartment to wishlist
  *         tags: [Wishlist]
- *         parameters:
- *           - in: query
- *             name: apartment_id
- *             schema:
- *               type: integer
- *             required: true
- *             description: apartment id
+ *         requestBody:
+ *           required: true
+ *           content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                  example:
+ *                      apartment_id: 1
  *         responses:
  *           '200':
  *                  description: A successful response
@@ -53,8 +54,8 @@ router.get('/', (req, res) => {
  */
 
 
-router.get('/add', (req, res) => {
-    const apartmentId = req.query.apartment_id;
+router.post('/add', (req, res) => {
+    const apartmentId = req.body.apartment_id;
     res.send({
         message: "Apartment added to wishlist",
         apartments: apartments
