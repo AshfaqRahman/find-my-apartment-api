@@ -1,15 +1,19 @@
 
-
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require('express');
-const app = express();
+const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const bodyParser = require('body-parser');
 
+const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 // const swaggerDocument = require('./swagger.json');
 
 const router = require('./routes/routes');
+app.use('/', router);
 
 const options = {
     "definition": {
@@ -34,9 +38,7 @@ let swaggerDocument = swaggerJsDoc(options);
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const hostname = '127.0.0.1';
-const port = 8000;
-
-app.use('/', router);
+const port = process.env.PORT || 3000;
 
 app.listen(port, () =>  {
     console.log(`Server running at http://${hostname}:${port}/`);
