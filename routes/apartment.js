@@ -1,7 +1,10 @@
-const express = require('express');
-const router = express.Router();
+const PromiseRouter = require("express-promise-router");
 const apartments = require("../db/apartment");
 const savedSearches = require("../db/apartment-search");
+const ApartmentController = require('../controller/apartment');
+
+const router = PromiseRouter();
+const controller = new ApartmentController();
 
 // create swagger apartmet schema
 /**
@@ -87,7 +90,7 @@ const savedSearches = require("../db/apartment-search");
 
 /** 
     * @swagger
-    * /apartments/all:
+    * /apartments:
     *      get:
     *           summary: Request for apartments
     *           tags: [Apartments]
@@ -104,9 +107,7 @@ const savedSearches = require("../db/apartment-search");
     *
 */
 
-router.get('/all', (req, res) => {
-    res.send(apartments);
-})
+router.get('/', controller.fetchAllApartments);
 
 /**
 * @swagger
