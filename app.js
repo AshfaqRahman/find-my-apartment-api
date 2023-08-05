@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 // const swaggerDocument = require('./swagger.json');
 
 const router = require('./routes/routes');
-app.use('/', router);
+app.use('/api', router);
 
 const options = {
     "definition": {
