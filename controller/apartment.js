@@ -7,6 +7,15 @@ class ApartmentController {
         const data = await repo.fetchAllApartments();
         res.json(data);
     }
+
+    // find apartment by id
+    findApartmentById = async (req, res) => {
+        console.log('ApartmentController::findApartmentById');
+        const { id } = req.params;
+        const data = await repo.findApartmentById(id);
+        res.json(data);
+    }
+    
 }
 
 module.exports = ApartmentController;

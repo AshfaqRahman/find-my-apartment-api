@@ -141,12 +141,7 @@ router.get('/', controller.fetchAllApartments);
 *                   type: string
 */
 
-router.get('/:apartmentId', (req, res) => {
-    const apartmentId = req.params.apartmentId;
-    res.send(
-        apartments[0]
-    ).status(200);
-})
+router.get('/:id', controller.findApartmentById)
 
 /** 
     * @swagger
