@@ -90,7 +90,7 @@ const controller = new ApartmentController();
 
 /** 
     * @swagger
-    * /apartments:
+    * /apartments/all:
     *      get:
     *           summary: Request for apartments
     *           tags: [Apartments]
@@ -107,7 +107,7 @@ const controller = new ApartmentController();
     *
 */
 
-router.get('/', controller.fetchAllApartments);
+router.get('/all', controller.fetchAllApartments);
 
 /**
 * @swagger
@@ -292,102 +292,157 @@ router.get("/search", (req, res) => {
     ).status(200);
 })
 
+// /**
+//  * @swagger
+//  * /apartments/advance-search:
+//  *   get:
+//  *     summary: Search for apartments
+//  *     tags: [Apartments]
+//  *     description: Retrieve apartments based on specified search filters
+//  *     parameters:
+//  *       - name: type
+//  *         in: query
+//  *         description: Apartment type (e.g., family, bachelor, sublet)
+//  *         schema:
+//  *           type: string
+//  *       - name: price_min
+//  *         in: query
+//  *         description: Minimum price range in BDT
+//  *         schema:
+//  *           type: integer
+//  *       - name: price_max
+//  *         in: query
+//  *         description: Maximum price range in BDT
+//  *         schema:
+//  *           type: integer
+//  *       - name: bedroom
+//  *         in: query
+//  *         description: Number of bedrooms
+//  *         schema:
+//  *           type: integer
+//  *       - name: washroom
+//  *         in: query
+//  *         description: Number of washrooms
+//  *         schema:
+//  *           type: integer
+//  *       - name: area_min
+//  *         in: query
+//  *         description: Minimum area in square feet
+//  *         schema:
+//  *           type: integer
+//  *       - name: area_max
+//  *         in: query
+//  *         description: Maximum area in square feet
+//  *         schema:
+//  *           type: integer
+//  *       - name: area
+//  *         in: query
+//  *         description: Specific area
+//  *         schema:
+//  *           type: string
+//  *       - name: zone
+//  *         in: query
+//  *         description: Specific zone
+//  *         schema:
+//  *           type: string
+//  *       - name: facilities
+//  *         in: query
+//  *         description: List of facilities
+//  *         schema:
+//  *           type: array
+//  *           items:
+//  *             type: string
+//  *       - name: star_points
+//  *         in: query
+//  *         description: List of star_points
+//  *         schema:
+//  *           type: array
+//  *           items:
+//  *             type: string
+//  *
+//  *     responses:
+//  *       '200':
+//  *         description: Successful response with matching apartments
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: array
+//  *               items:
+//  *                 $ref: '#/components/schemas/Apartment'
+//  */
+
 /**
  * @swagger
- * /apartments/advance-search:
+ * /apartments/:
  *   get:
- *     summary: Search for apartments
+ *     summary: Advanced apartment search
+ *     description: Retrieve a list of apartments based on advanced search criteria.
  *     tags: [Apartments]
- *     description: Retrieve apartments based on specified search filters
  *     parameters:
- *       - name: type
- *         in: query
- *         description: Apartment type (e.g., family, bachelor, sublet)
- *         schema:
- *           type: string
- *       - name: price_min
- *         in: query
- *         description: Minimum price range in BDT
- *         schema:
- *           type: integer
- *       - name: price_max
- *         in: query
- *         description: Maximum price range in BDT
- *         schema:
- *           type: integer
- *       - name: bedroom
- *         in: query
- *         description: Number of bedrooms
- *         schema:
- *           type: integer
- *       - name: washroom
- *         in: query
- *         description: Number of washrooms
- *         schema:
- *           type: integer
- *       - name: area_min
- *         in: query
- *         description: Minimum area in square feet
- *         schema:
- *           type: integer
- *       - name: area_max
- *         in: query
- *         description: Maximum area in square feet
- *         schema:
- *           type: integer
- *       - name: area
- *         in: query
- *         description: Specific area
- *         schema:
- *           type: string
- *       - name: zone
- *         in: query
- *         description: Specific zone
- *         schema:
- *           type: string
- *       - name: facilities
- *         in: query
- *         description: List of facilities
+ *       - in: query
+ *         name: apartmentTypes
  *         schema:
  *           type: array
  *           items:
  *             type: string
- *       - name: star_points
- *         in: query
- *         description: List of star_points
+ *         description: Apartment types (e.g., Family, Bachelor)
+ *       - in: query
+ *         name: beds
  *         schema:
  *           type: array
  *           items:
  *             type: string
- *
+ *         description: Number of beds (e.g., 1, 2)
+ *       - in: query
+ *         name: baths
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Number of baths (e.g., 2)
+ *       - in: query
+ *         name: price_min
+ *         schema:
+ *           type: string
+ *         description: Minimum price range
+ *       - in: query
+ *         name: price_max
+ *         schema:
+ *           type: string
+ *         description: Maximum price range
+ *       - in: query
+ *         name: area_min
+ *         schema:
+ *           type: string
+ *         description: Minimum area size
+ *       - in: query
+ *         name: area_max
+ *         schema:
+ *           type: string
+ *         description: Maximum area size
+ *       - in: query
+ *         name: facilities
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Facilities (e.g., Gas, Internet)
+ *       - in: query
+ *         name: keywords
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: string
+ *         description: Keywords (e.g., Near Park, Near Hospital)
  *     responses:
- *       '200':
- *         description: Successful response with matching apartments
+ *       200:
+ *         description: Successful response with apartment search results.
  *         content:
  *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Apartment'
+ *             example:
+ *               searchResults: []
  */
-
-
-router.get("/advance-search", (req, res) => {
-    let req_obj = {
-        "type": req.query.type,
-        "price_min": req.query.price_min,
-        "price_max": req.query.price_max,
-        "bedroom": req.query.bedroom,
-        "washroom": req.query.washroom, 
-        "area_min": req.query.area_min,
-        "area_max": req.query.area_max,
-        "area": req.query.area,
-        "zone": req.query.zone,
-        "facilities": req.query.facilities,
-        "star_points": req.query.star_points,
-    }
-    res.send(apartments).status(200);
-})
+router.get("/", controller.advanceSearch)
 
 
 /**
