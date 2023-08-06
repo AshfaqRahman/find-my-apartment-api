@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+// import user controller
+const AuthController = require('../controller/auth');
+const authController = new AuthController();
+
 // create swagger authentication tag
 /**
  * @swagger
@@ -10,49 +14,44 @@ const router = express.Router();
  */
 
 
-/** 
-    * @swagger
-    * /auth/register:
-    *      post:
-    *           summary: Request for register
-    *           tags: [Authentication]
-    *           requestBody:
-    *              required: true
-    *              content:
-    *                 application/json:
-    *                    schema:
-    *                      type: object
-    *                    example:
-    *                     username: "John Doe"
-    *                     password: "secretpassword"
-    *                     email: "xyz@abc.p"
-    *                     phone: "1234567890"
-    * 
-    *           responses:
-    *               '201':
-    *                   description: A successful response
-    *                   content:
-    *                       application/json:
-    *                           schema:
-    *                               type: object
-    *                                  
-    *
-*/
-router.post('/register', (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
-    
-    let id = 1;
-    res.send({
-        id: id,
-        username: username,
-    })
-      
-})
+// Route for user registration
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     description: Creates a new user account.
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               phone_no:
+ *                 type: string
+ *               gender:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Bad request - Invalid input data
+ */
+router.post('/register', authController.register);
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *     post:
  *         summary: Request for login
  *         tags: [Authentication]
@@ -77,19 +76,12 @@ router.post('/register', (req, res) => {
  * 
  */
 
-router.post('/login', (req, res) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    let token = "token";
-    return res.send({
-        token: token,
-    });
-})
+router.post('/login', authController.login)
 
 
 /**
  * @swagger
- * /auth/logout:
+ * /api/auth/logout:
  *     post:
  *         summary: Request for logout
  *         tags: [Authentication]
