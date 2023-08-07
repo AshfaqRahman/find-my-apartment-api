@@ -17,13 +17,24 @@ class ApartmentRepository{
         console.log(`ApartmentRepository::findApartmentById {id: ${id}}`)
         const { data, error } = await supabase
             .from('Apartment')
-            .select('*')
+            // location_id is a foreign key
+            // https://stackoverflow.com/questions/76107620/supabase-query-go-get-parent-record-with-at-least-one-child-record
+            // https://stackoverflow.com/questions/75224153/query-from-multiple-tables-in-supabase
+            .select(`
+            *, 
+            location: Location!inner(*),
+            facilities: ApFac(facility:Facilities(title)), 
+            startpoints: ApStar(starpoint:Starpoints(title))
+            `) //
             .eq('apartment_id', id)
             .single()
         if (error) {
             console.log(error)
             return null
         }
+
+        delete data.location_id
+
         return data
     }
 
@@ -39,29 +50,33 @@ class ApartmentRepository{
             console.log(params)
             const { data, error } = await supabase
                 .from('Apartment')
-                .select('*')
+                .select(`
+                *, 
+                location: Location!inner(*),
+                facilities: ApFac(facility:Facilities(title)), 
+                startpoints: ApStar(starpoint:Starpoints(title))
+                `)
                 .in('type', apartmentTypes)
                 .in('bedrooms', beds)
                 .in('washrooms', baths)
                 .gte('price', price_min)
                 .lte('price', price_max)
                 .gte('area_sqft', area_min)
-                .lte('area_sqft', area_max)
-                .contains('facilities', facilities)
-                .contains('star_points', keywords);
+                .lte('area_sqft', area_max);
         
             if (error) {
                 throw error;
             }
+
+            // print data length
+            console.log(`Advance search: total apartment ${data.length}`)
+
             
-            console.log("data")
-            console.log(data)
-        
             return data;
-            } catch (error) {
+        } catch (error) {
             console.error('Error performing advanced search:', error.message);
             return null;
-            }
+        }
     }
 }
 

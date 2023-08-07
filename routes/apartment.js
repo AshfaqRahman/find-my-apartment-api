@@ -2,6 +2,8 @@ const PromiseRouter = require("express-promise-router");
 const apartments = require("../db/apartment");
 const savedSearches = require("../db/apartment-search");
 const ApartmentController = require('../controller/apartment');
+const { authenticateToken } = require("../config/authorization.js");
+
 
 const router = PromiseRouter();
 const controller = new ApartmentController();
