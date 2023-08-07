@@ -17,6 +17,9 @@ app.use(morgan('dev'));
 const router = require('./routes/routes');
 app.use('/api', router);
 
+const hostname = '127.0.0.1';
+const port = process.env.PORT || 3000;
+
 const options = {
     "definition": {
         "openapi": "3.1.0",
@@ -27,9 +30,25 @@ const options = {
         },
         "server": [
             {
-                "url": "http://127.0.0.1:8000"
+                "url": `http://${hostname}:${port}`
             }
-        ]
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    in: 'header',
+                    name: 'Authorization',
+                    description: 'Bearer token to access these api endpoints',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
+        },
+        security: [{
+            bearerAuth: [],
+        },
+        ],
     },
     "apis": ["./routes/*.js"]
 }
@@ -37,10 +56,8 @@ const options = {
 let swaggerDocument = swaggerJsDoc(options);
 
 
-app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const hostname = '127.0.0.1';
-const port = process.env.PORT || 3000;
 
 app.listen(port, () =>  {
     console.log(`Server running at http://${hostname}:${port}/`);
