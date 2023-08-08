@@ -2,6 +2,8 @@ const PromiseRouter = require("express-promise-router");
 const apartments = require("../db/apartment");
 const savedSearches = require("../db/apartment-search");
 const ApartmentController = require('../controller/apartment');
+const { authenticateToken } = require("../config/authorization.js");
+
 
 const router = PromiseRouter();
 const controller = new ApartmentController();
@@ -90,7 +92,7 @@ const controller = new ApartmentController();
 
 /** 
     * @swagger
-    * /apartments/all:
+    * /api/apartments/all:
     *      get:
     *           summary: Request for apartments
     *           tags: [Apartments]
@@ -111,7 +113,7 @@ router.get('/all', controller.fetchAllApartments);
 
 /**
 * @swagger
-* /apartments/{apartmentId}:
+* /api/apartments/{apartmentId}:
 *   get:
 *     summary: Request for an apartment
 *     tags: [Apartments]
@@ -145,7 +147,7 @@ router.get('/:id', controller.findApartmentById)
 
 /** 
     * @swagger
-    * /apartments/add:
+    * /api/apartments/add:
     *      post:
     *           summary: apartments post
     *           tags: [Apartments]
@@ -214,7 +216,7 @@ router.post('/add', (req, res) => {
 
 /**
  * @swagger
- * /apartments/search:
+ * /api/apartments/search:
  *   get:
  *     summary: Search for apartments
  *     tags: [Apartments]
@@ -294,7 +296,7 @@ router.get("/search", (req, res) => {
 
 // /**
 //  * @swagger
-//  * /apartments/advance-search:
+//  * /api/apartments/advance-search:
 //  *   get:
 //  *     summary: Search for apartments
 //  *     tags: [Apartments]
@@ -373,7 +375,7 @@ router.get("/search", (req, res) => {
 
 /**
  * @swagger
- * /apartments/:
+ * /api/apartments/:
  *   get:
  *     summary: Advanced apartment search
  *     description: Retrieve a list of apartments based on advanced search criteria.
@@ -447,7 +449,7 @@ router.get("/", controller.advanceSearch)
 
 /**
  * @swagger
- * /apartments/save-search:
+ * /api/apartments/save-search:
  *   post:
  *     summary: Search for apartments
  *     tags: [Apartments]
@@ -502,7 +504,7 @@ router.post("/save-search", (req, res) => {
 
 /**
  * @swagger
- * /apartments/saved-searches/all:
+ * /api/apartments/saved-searches/all:
  *   get:
  *     summary: Search for apartments
  *     tags: [Apartments]
@@ -523,7 +525,7 @@ router.get("/saved-searches/all", (req, res) => {
 
 /**
 * @swagger
-* /apartments/saved-searches/{search_id}:
+* /api/apartments/saved-searches/{search_id}:
 *   get:
 *     summary: Search for apartments
 *     tags: [Apartments]
@@ -554,7 +556,7 @@ router.get("/saved-searches/:search_id", (req, res) => {
 
 /**
  * @swagger
- * /apartments:
+ * /api/apartments:
  *     patch:
  *         summary: Request for update apartment
  *         tags: [Apartments]
@@ -609,7 +611,7 @@ router.patch('/', (req, res) => {
 
 /**
  * @swagger
- * /apartments/{apartmentId}:
+ * /api/apartments/{apartmentId}:
  *   delete:
  *     summary: Request to delete an apartment
  *     tags: [Apartments]

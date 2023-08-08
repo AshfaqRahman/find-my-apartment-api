@@ -20,6 +20,8 @@ class ApartmentController {
     advanceSearch = async (req, res) => {
         console.log('ApartmentController::advanceSearch');
 
+        console.log(req.query)
+
         // js object
         const params = {
             apartmentTypes: req.query.apartmentTypes.map(type => {
