@@ -19,7 +19,7 @@ class AuthRepository{
         }
 
         if (user.length > 0) {
-            return { error: 'User already exists' }
+            return { error: 'This email is already registered' }
         }   
 
         // create user
