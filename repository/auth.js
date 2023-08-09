@@ -65,7 +65,7 @@ class AuthRepository{
         }
 
         if (user.length == 0) {
-            return { error: 'User does not exist' }
+            return { message: 'User does not exist' }
         }
 
         return { data: user[0] }
