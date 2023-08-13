@@ -77,13 +77,13 @@ class ApartmentController {
       );
       return (
         facilities.length > 0 &&
-        req.query.facilities.every((facility) =>
+        params.facilities.every((facility) =>
           facilities.includes(facility)
         ) &&
-        req.query.keywords.every((keyword) => starpoints.includes(keyword))
+        params.keywords.every((keyword) => starpoints.includes(keyword))
       );
     });
-    res.json(data);
+    res.status(200).json(data);
   };
 }
 

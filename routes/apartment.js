@@ -1,11 +1,11 @@
-const PromiseRouter = require("express-promise-router");
+const express = require('express');
+const router = express.Router();
 const apartments = require("../db/apartment");
 const savedSearches = require("../db/apartment-search");
 const ApartmentController = require('../controller/apartment');
 const { authenticateToken } = require("../config/authorization.js");
 
 
-const router = PromiseRouter();
 const controller = new ApartmentController();
 
 // create swagger apartmet schema

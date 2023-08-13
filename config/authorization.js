@@ -9,7 +9,7 @@ function authenticateToken(req, res, next){
     // verify token
     jwt.verify(token, process.env.JWT_SECRET_KEY, function(error, user){
         if(error)
-            return res.status(403).json({error: error.message});
+            return res.status(403).json({error: error.message, message: "your session expired, please login again."});
         req.body.user = user;
         next();
     })

@@ -6,14 +6,14 @@ class FixedValuesController {
     console.log("FixedValuesController::getFacilities");
     let data = await repo.getFacilities();
     data = data.map(datum => datum.title);
-    res.json(data);
+    res.status(200).json(data);
   }
 
   getStarPoints = async (req, res) => {
     console.log("FixedValuesController::getStarPoints");
     let data = await repo.getStarPoints();
     data = data.map(datum => datum.title);
-    res.json(data);
+    res.status(200).json(data);
   }
 }
 
