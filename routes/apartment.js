@@ -444,7 +444,7 @@ router.get("/search", (req, res) => {
  *             example:
  *               searchResults: []
  */
-router.get("/", controller.advanceSearch)
+router.get("/", authenticateToken, controller.advanceSearch)
 
 
 /**
