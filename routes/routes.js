@@ -7,6 +7,7 @@ const roomFinderRouter = require('./room_finder');
 const roommateFinderRouter = require('./roommate_finder');
 const messageRouter = require('./message');
 const recomendationRouter = require('./recomendation');
+const fixedValuesRouter = require('./fixed-values');
 
 
 router.use('/auth', authRouter);
@@ -16,6 +17,7 @@ router.use('/room_finder', roomFinderRouter);
 router.use('/roommate_finder', roommateFinderRouter);
 router.use('/message', messageRouter);
 router.use('/recomendation', recomendationRouter);
+router.use('/fixed-values', fixedValuesRouter);
 
 module.exports = router;
 
