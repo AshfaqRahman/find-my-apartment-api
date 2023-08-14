@@ -72,6 +72,12 @@ class AuthController {
         }
     }
 
+    logout = async function (req, res) {
+        console.log("AuthController:: logout");
+        
+        return res.status(200).json({ message: "Logged out successfully" });
+    }
+
     isLoggedIn = async (req, res) => {
         console.log("AuthController:: isLoggedIn");
         return res.status(200).json({ message: "Already Logged in" });
