@@ -72,6 +72,11 @@ class AuthController {
         }
     }
 
+    isLoggedIn = async (req, res) => {
+        console.log("AuthController:: isLoggedIn");
+        return res.status(200).json({ message: "Already Logged in" });
+    }
+
 }
 
 module.exports = AuthController;

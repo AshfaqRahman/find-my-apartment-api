@@ -5,6 +5,8 @@ const router = express.Router();
 const AuthController = require('../controller/auth');
 const authController = new AuthController();
 
+const { authenticateToken } = require("../config/authorization.js");
+
 // create swagger authentication tag
 /**
  * @swagger
@@ -101,6 +103,9 @@ router.post('/logout', (req, res) => {
         message: "successfully logged out",
     });
 })
+
+
+router.post('/is-token-valid', authenticateToken, authController.isLoggedIn)
 
 
 module.exports = router;
