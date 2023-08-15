@@ -62,8 +62,8 @@ class ApartmentRepository {
           `
                 *, 
                 location: Location!inner(*),
-                facilities: ApartmentFacilities(facility:Facilities(title)), 
-                starpoints: ApartmentStarPoints(starpoint:Starpoints(title))
+                facilities: ApartmentFacilities(facility:Facilities(facilities_id, title)), 
+                starpoints: ApartmentStarPoints(starpoint:Starpoints(starpoint_id, title))
                 `
         )
         .in("type", apartmentTypes)
@@ -73,8 +73,8 @@ class ApartmentRepository {
         .lte("price", price_max)
         .gte("area_sqft", area_min)
         .lte("area_sqft", area_max);
-
       if (error) {
+        // console.log("Error performing advanced search:", error.message)
         throw error;
       }
 

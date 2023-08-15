@@ -67,20 +67,23 @@ class ApartmentController {
     }
 
     let data = await repo.advanceSearch(params);
-
+    
     data = data.filter((apartment) => {
       let facilities = apartment.facilities.map(
-        (facility) => facility.facility.title
+        (facility) => facility.facility.facilities_id
       );
       let starpoints = apartment.starpoints.map(
-        (starpoint) => starpoint.starpoint.title
+        (starpoint) => starpoint.starpoint.starpoint_id
       );
       return (
-        facilities.length > 0 &&
-        params.facilities.every((facility) =>
-          facilities.includes(facility)
-        ) &&
-        params.keywords.every((keyword) => starpoints.includes(keyword))
+        params.facilities.length === 0 ||
+        params.keywords.length === 0 ||
+        (facilities.length > 0 &&
+          params.facilities.every((facility) =>
+            facilities.includes(+facility)
+          ) &&
+          starpoints.length > 0 &&
+          params.keywords.every((keyword) => starpoints.includes(+keyword)))
       );
     });
     res.status(200).json(data);
