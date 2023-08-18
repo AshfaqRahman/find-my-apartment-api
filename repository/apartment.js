@@ -40,6 +40,85 @@ class ApartmentRepository {
     return data;
   };
 
+  add = async (params) => {
+    console.log("ApartmentRepository::add");
+
+    try {
+      console.log(params);
+
+      let locationParams = params.location;
+      let location = await supabase
+        .from("Location")
+        .insert(locationParams)
+        .select();
+      if(location.error) throw location.error;
+
+      console.log("ApartmentRepository::add:: location inserted successfully");
+
+      let apartmentParams = params.apartment;
+      apartmentParams.location_id = location.data[0].id;
+      apartmentParams.owner_id = params.user.id;
+      let apartmentRow = await supabase
+        .from("Apartment")
+        .insert(apartmentParams)
+        .select();
+
+      console.log("ApartmentRepository::add:: apartment inserted successfully");
+
+      let apartmentFacilitiesParams = params.facilities.facility_ids.map(
+        (facility) => {
+          return {
+            apartment_id: apartmentRow.data[0].id,
+            facilities_id: facility,
+          };
+        }
+      );
+      let facilities = await supabase
+        .from("ApartmentFacilities")
+        .insert(apartmentFacilitiesParams)
+        .select();
+
+      console.log(
+        "ApartmentRepository::add:: facilities inserted successfully"
+      );
+
+      let apartmentStarpointsParams = params.keywords.starpoint_ids.map(
+        (starpoint) => {
+          return {
+            apartment_id: apartmentRow.data[0].id,
+            starpoint_id: starpoint,
+          };
+        }
+      );
+      let starpoints = await supabase
+        .from("ApartmentStarPoints")
+        .insert(apartmentStarpointsParams)
+        .select();
+      console.log(
+        "ApartmentRepository::add:: starpoints inserted successfully"
+      );
+      let aparmtentImagesParams = params.images.image_urls.map((image) => {
+        return {
+          apartment_id: apartmentRow.data[0].id,
+          image_url: image,
+        };
+      });
+      let imageRow = await supabase
+        .from("ApartmentImages")
+        .insert(aparmtentImagesParams)
+        .select();
+
+      console.log("ApartmentRepository::add:: images inserted successfully");
+
+      return {
+        data: "successfully added your apartment",
+      };
+    } catch (error) {
+      console.log("ApatientRepository::add:: error: " + error);
+      return { error: {message: error.message} };
+    }
+  };
+
   // advance search with filters
   advanceSearch = async (params) => {
     try {
