@@ -19,18 +19,16 @@ class ApartmentController {
 
   add = async (req, res) => {
     console.log("ApartmentController::add");
-    const {data, error} = await repo.add(req.body);
-    if(error) {
+    const { data, error } = await repo.add(req.body);
+    if (error) {
       res.status(500).json(error);
     }
     res.status(200).json(data);
-  }
+  };
 
   // advance search with filters
   advanceSearch = async (req, res) => {
     console.log("ApartmentController::advanceSearch");
-
-    // console.log(req.query)
 
     // js object
     const params = {
@@ -75,9 +73,8 @@ class ApartmentController {
         params.baths.push(i);
       }
     }
-
     let data = await repo.advanceSearch(params);
-    
+
     data = data.filter((apartment) => {
       let facilities = apartment.facilities.map(
         (facility) => facility.facility.facilities_id
@@ -86,38 +83,43 @@ class ApartmentController {
         (starpoint) => starpoint.starpoint.starpoint_id
       );
       return (
-        params.facilities.length === 0 ||
-        params.keywords.length === 0 ||
-        (facilities.length > 0 &&
+        (params.facilities.length === 0 ||
           params.facilities.every((facility) =>
             facilities.includes(+facility)
-          ) &&
-          starpoints.length > 0 &&
-          params.keywords.every((keyword) => starpoints.includes(+keyword)))
+          )) &&
+        (params.keywords.length === 0 ||
+          params.keywords.every((keyword) => starpoints.includes(+keyword))) &&
+        (params.apartmentTypes.length === 0 ||
+          params.apartmentTypes.some(
+            (type) => apartment.types.includes(type)
+          ))
       );
     });
 
-
-
     let center = req.query.location;
-    let radius = req.query.radius;
+    let radius = +req.query.radius;
 
     let filteredData = [];
-    console.log("found from database: ",data.length);
+    console.log("found from database: ", data.length);
 
     if (center !== undefined && radius !== undefined) {
       let origin = `${center.lat},${center.lng}`;
-      let destinations = data.map(datum => `${datum.location.latitude},${datum.location.longitude}`).join("|");
+      let destinations = data
+        .map(
+          (datum) => `${datum.location.latitude},${datum.location.longitude}`
+        )
+        .join("|");
       let result = await getDistance(origin, destinations);
-      result.rows[0].elements.foreach((element, index) => {
-        if(element.distance.value <= radius * 1000) {
+      for (let index = 0; index < result.rows[0].elements.length; index++) {
+        const element = result.rows[0].elements[index];
+        if (element.distance.value <= radius * 1000) {
           filteredData.push(data[index]);
         }
-      })
+      }
     } else {
       filteredData = data;
     }
-    console.log("after filtering with radius: ",filteredData.length);
+    console.log("after filtering with radius: ", filteredData.length);
     res.status(200).json(filteredData);
   };
 }
