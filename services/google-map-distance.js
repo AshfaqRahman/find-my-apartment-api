@@ -12,7 +12,7 @@ let getDistance = async (origin, destinations) => {
             destinations: destinations
         }
     })
-    console.log(result.data);
+    // console.log(result.data);
     return result.data;
 }
 
