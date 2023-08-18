@@ -17,6 +17,15 @@ class ApartmentController {
     res.json(data);
   };
 
+  add = async (req, res) => {
+    console.log("ApartmentController::add");
+    const {data, error} = await repo.add(req.body);
+    if(error) {
+      res.status(500).json(error);
+    }
+    res.status(200).json(data);
+  }
+
   // advance search with filters
   advanceSearch = async (req, res) => {
     console.log("ApartmentController::advanceSearch");
