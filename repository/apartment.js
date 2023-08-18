@@ -123,15 +123,12 @@ class ApartmentRepository {
   advanceSearch = async (params) => {
     try {
       const {
-        apartmentTypes, // e.g. ["Family", "Bachelor"]
         beds, // e.g. ['1', '2', '3']
         baths,
         price_min,
         price_max,
         area_min,
         area_max,
-        facilities,
-        keywords,
       } = params;
 
       // console.log(params)
@@ -145,7 +142,6 @@ class ApartmentRepository {
                 starpoints: ApartmentStarPoints(starpoint:Starpoints(starpoint_id, title))
                 `
         )
-        .in("type", apartmentTypes)
         .in("bedrooms", beds)
         .in("washrooms", baths)
         .gte("price", price_min)
