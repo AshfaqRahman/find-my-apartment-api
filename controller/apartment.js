@@ -1,4 +1,5 @@
 const ApartmentRepository = require("../repository/apartment");
+const { getDistance } = require("../services/google-map-distance");
 const repo = new ApartmentRepository();
 
 class ApartmentController {
@@ -86,7 +87,29 @@ class ApartmentController {
           params.keywords.every((keyword) => starpoints.includes(+keyword)))
       );
     });
-    res.status(200).json(data);
+
+
+
+    let center = req.query.location;
+    let radius = req.query.radius;
+
+    let filteredData = [];
+    console.log("found from database: ",data.length);
+
+    if (center !== undefined && radius !== undefined) {
+      let origin = `${center.lat},${center.lng}`;
+      let destinations = data.map(datum => `${datum.location.latitude},${datum.location.longitude}`).join("|");
+      let result = await getDistance(origin, destinations);
+      result.rows[0].elements.foreach((element, index) => {
+        if(element.distance.value <= radius * 1000) {
+          filteredData.push(data[index]);
+        }
+      })
+    } else {
+      filteredData = data;
+    }
+    console.log("after filtering with radius: ",filteredData.length);
+    res.status(200).json(filteredData);
   };
 }
 
