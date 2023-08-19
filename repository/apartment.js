@@ -44,7 +44,6 @@ class ApartmentRepository {
     console.log("ApartmentRepository::add");
 
     try {
-      console.log(params);
 
       let locationParams = params.location;
       let location = await supabase
