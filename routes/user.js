@@ -4,6 +4,8 @@ const apartments = require("../db/apartment");
 const users = require("../db/user");
 const myPreferenceRouter = require('./my-preference');
 const wishlistRouter = require('./wishlist');
+const UserController = require('../controller/user');
+const { authenticateToken } = require("../config/authorization.js");
 
 /**
  * @swagger
