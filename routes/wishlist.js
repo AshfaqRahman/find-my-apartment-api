@@ -58,28 +58,26 @@ router.post('/add', authenticateToken, controller.addToWishlist)
 
 /**
  * @swagger
- * /api/wishlist:
+ * /api/wishlist/{apartment_id}:
  *     delete:
- *         summary: Request for add apartment to wishlist
- *         tags: [Wishlist]
- *         requestBody:
+ *       summary: Request for add apartment to wishlist
+ *       tags: [Wishlist]
+ *       parameters:
+ *        - in: path
+ *          name: apartment_id
  *          required: true
- *          content:
- *              application/json:
- *                  schema:
- *                      type: object
- *                  example:
- *                      apartment_id: "b9741c46-c7bd-4fa5-a323-8cc2dba15e10"
- *         responses:
- *           '200':
- *                  description: A successful response
- *           content:
- *              application/json:
- *               schema:
- *                type: object
+ *          schema:
+ *           type: string
+ *       responses:
+ *         '200':
+ *               description: A successful response
+ *         content:
+ *            application/json:
+ *             schema:
+ *              type: object
  */
 
-router.delete('/', authenticateToken, controller.removeFromWishlist)
+router.delete('/:apartment_id', authenticateToken, controller.removeFromWishlist)
 
 
 module.exports = router;
