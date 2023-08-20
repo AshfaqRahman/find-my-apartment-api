@@ -62,13 +62,14 @@ router.post('/add', authenticateToken, controller.addToWishlist)
  *     delete:
  *         summary: Request for add apartment to wishlist
  *         tags: [Wishlist]
- *         parameters:
- *           - in: query
- *             name: apartment_id
- *             schema:
- *               type: integer
- *             required: true
- *             description: apartment id
+ *         requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      type: object
+ *                  example:
+ *                      apartment_id: "b9741c46-c7bd-4fa5-a323-8cc2dba15e10"
  *         responses:
  *           '200':
  *                  description: A successful response
@@ -78,12 +79,7 @@ router.post('/add', authenticateToken, controller.addToWishlist)
  *                type: object
  */
 
-router.delete('/', (req, res) => {
-    let apartmentId = req.body.apartment_id;
-    res.send({
-        message: "successfully removed from wishlist"
-    })
-})
+router.delete('/', authenticateToken, controller.removeFromWishlist)
 
 
 module.exports = router;

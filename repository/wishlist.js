@@ -51,12 +51,31 @@ class WishlistRepository {
       .select(`apartment_id`)
       .eq('user_id', user_id); // select all rows after insert
     
+    console.log(`Wishlist::getAllWishlist:: data:`);
+    console.log(data);
     if(error){
       return { error: "Internal Server Error!", code: 500 }
     }
 
-    return data;
+    return {data};
   };
+
+  removeFromWishlist = async (user_id, apartment_id) => {
+    console.log("Wishlist::removeFromWishlist");
+    const { data, error }  = await supabase
+      .from("Wishlist")
+      .delete()
+      .eq('user_id', user_id)
+      .match({apartment_id: apartment_id}); // select all rows after insert
+      
+    if(error){
+      return { error: "Internal Server Error!", code: 500 }
+    }
+
+    return {
+      message: "Removed from wishlist",
+    }
+  }
 }
 
 // export the class

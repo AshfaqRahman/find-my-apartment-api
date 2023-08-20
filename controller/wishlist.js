@@ -33,6 +33,23 @@ class WishlistController {
 
     res.status(200).json(data);
   };
+
+  removeFromWishlist = async (req, res) => {
+    console.log("WishlistController::removeFromWishlist");
+    const user_id = req.body.user.id;
+    const apartment_id = req.body.apartment_id;
+    const {message, error, code} = await repo.removeFromWishlist(user_id, apartment_id);
+    if(error){
+      res.status(code).json({
+        code : code,
+        message: error,
+      });
+      return;
+    }
+    res.status(200).json({
+      message: message,
+    });
+  }
 }
 
 module.exports = WishlistController;
