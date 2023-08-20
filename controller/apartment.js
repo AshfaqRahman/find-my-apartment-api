@@ -103,7 +103,9 @@ class ApartmentController {
     let filteredData = [];
     console.log("found from database: ", data.length);
 
-    if (center !== undefined && radius !== undefined) {
+    console.log(center, radius);
+
+    if (center.lat !== undefined && center.lng !== undefined && radius !== undefined && radius !== 0) {
       let origin = `${center.lat},${center.lng}`;
       let destinations = data
         .map(
