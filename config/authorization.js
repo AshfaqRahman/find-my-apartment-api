@@ -2,6 +2,12 @@ const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next){
     const token = req.headers["authorization"]; // token
+    // check if teken starts with Bearer
+    // remove Bearer if it does
+    if(token && token.startsWith("Bearer ")){
+        token = token.slice(7, token.length);
+    }
+
     // console.log(`authenticateToken token: ${token}`);
     if(token === null || token === undefined || token === "")
         return res.status(401).json({code: 401, message: "Not authorized."})

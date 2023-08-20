@@ -24,11 +24,12 @@ class ApartmentRepository {
         `
             *, 
             location: Location!inner(*),
-            facilities: ApFac(facility:Facilities(title)), 
-            startpoints: ApStar(starpoint:Starpoints(title))
+            images: ApartmentImages!inner(image_url),
+            facilities: ApartmentFacilities(facility:Facilities(title)), 
+            startpoints: ApartmentStarPoints(starpoint:Starpoints(title))
             `
       ) //
-      .eq("apartment_id", id)
+      .eq("id", id)
       .single();
     if (error) {
       console.log(error);

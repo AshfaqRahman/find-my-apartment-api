@@ -124,7 +124,7 @@ router.get('/all', controller.fetchAllApartments);
 *         description: Apartment ID
 *         required: true
 *         schema:
-*           type: integer
+*           type: string
 *     responses:
 *       '200':
 *         description: OK
