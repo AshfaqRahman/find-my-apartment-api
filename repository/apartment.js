@@ -11,27 +11,11 @@ class ApartmentRepository {
     return data.rows;
   };
 
-  // find apartment by id
-  // use supabase sdk
-  findApartmentById = async (id) => {
-    console.log(`ApartmentRepository::findApartmentById {id: ${id}}`);
-    const { data, error } = await supabase
-      .from("Apartment")
-      // location_id is a foreign key
-      // https://stackoverflow.com/questions/76107620/supabase-query-go-get-parent-record-with-at-least-one-child-record
-      // https://stackoverflow.com/questions/75224153/query-from-multiple-tables-in-supabase
-      // add a field is exist in wishlist
-      .select(
-        `
-            *, 
-            location: Location!inner(*),
-            images: ApartmentImages!inner(image_url),
-            facilities: ApartmentFacilities(facility:Facilities(title)), 
-            starpoints: ApartmentStarPoints(starpoint:Starpoints(title))
-            `
-      ) //
-      .eq("id", id)
-      .single();
+  findApartmentById = async (curr_user_id, f_apartment_id) => {
+    let { data, error } = await supabase.rpc('get_apartment_details', {
+            curr_user_id, f_apartment_id
+          })
+
     if (error) {
       console.log(`ApartmentRepository::findApartmentById:: error: ${error}`);
       console.log(error)
@@ -41,10 +25,9 @@ class ApartmentRepository {
       }
     }
 
-    delete data.location_id;
-
-    return {data};
+    return {data:data[0]};
   };
+
 
   add = async (params) => {
     console.log("ApartmentRepository::add");

@@ -143,7 +143,7 @@ router.get('/all', controller.fetchAllApartments);
 *                   type: string
 */
 
-router.get('/:id', controller.findApartmentById)
+router.get('/:id', authenticateToken, controller.findApartmentById)
 
 /** 
     * @swagger

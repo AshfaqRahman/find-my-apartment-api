@@ -13,7 +13,8 @@ class ApartmentController {
   findApartmentById = async (req, res) => {
     console.log("ApartmentController::findApartmentById");
     const { id } = req.params;
-    const {data, error} = await repo.findApartmentById(id);
+    const user_id = req.body.user.id;
+    const {data, error} = await repo.findApartmentById(user_id,id);
     if (error) {
       res.status(404).json({
         message: error,
