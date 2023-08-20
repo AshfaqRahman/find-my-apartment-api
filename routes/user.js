@@ -7,6 +7,8 @@ const wishlistRouter = require('./wishlist');
 const UserController = require('../controller/user');
 const { authenticateToken } = require("../config/authorization.js");
 
+const controller = new UserController();
+
 /**
  * @swagger
  * tags:
@@ -14,6 +16,7 @@ const { authenticateToken } = require("../config/authorization.js");
  *  description: user profile endpoints
  */
 
+router.use('/profile', authenticateToken, controller.getUserInfo);
 router.use('/my-preference', myPreferenceRouter);
 router.use('/wishlist', wishlistRouter);
 
@@ -34,11 +37,11 @@ router.use('/wishlist', wishlistRouter);
     *                                  
     *
 */
-router.get('/profile', (req, res) => {
-    res.send(
-        users[0]
-    )
-})
+// router.get('/profile', (req, res) => {
+//     res.send(
+//         users[0]
+//     )
+// })
 
 /**
  * @swagger
