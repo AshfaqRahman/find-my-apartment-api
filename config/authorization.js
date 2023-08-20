@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next){
-    const token = req.headers["authorization"]; // token
+    var token = req.headers["authorization"]; // token
     // check if teken starts with Bearer
     // remove Bearer if it does
     if(token && token.startsWith("Bearer ")){

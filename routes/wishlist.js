@@ -1,7 +1,9 @@
 const express = require("express")
 const router = express.Router()
 const apartments = require("../db/apartment");
-
+const WishlistController = require("../controller/wishlist");
+const controller = new WishlistController();
+const { authenticateToken } = require("../config/authorization.js");
 
 /**
  * @swagger
@@ -12,7 +14,7 @@ const apartments = require("../db/apartment");
 
 /**
  * @swagger
- * /user/wishlist:
+ * /api/wishlist:
  *     get:
  *         summary: Request for get wishlist
  *         tags: [Wishlist]
@@ -26,13 +28,11 @@ const apartments = require("../db/apartment");
  */
 
 
-router.get('/', (req, res) => {
-    res.send(apartments);
-})
+router.get('/', authenticateToken, controller.getWishlist)
 
 /**
  * @swagger
- * /user/wishlist/add:
+ * /api/wishlist/add:
  *     post:
  *         summary: Request for add apartment to wishlist
  *         tags: [Wishlist]
@@ -43,7 +43,7 @@ router.get('/', (req, res) => {
  *                  schema:
  *                      type: object
  *                  example:
- *                      apartment_id: 1
+ *                      apartment_id: "b9741c46-c7bd-4fa5-a323-8cc2dba15e10"
  *         responses:
  *           '200':
  *                  description: A successful response
@@ -54,17 +54,11 @@ router.get('/', (req, res) => {
  */
 
 
-router.post('/add', (req, res) => {
-    const apartmentId = req.body.apartment_id;
-    res.send({
-        message: "Apartment added to wishlist",
-        apartments: apartments
-    })
-})
+router.post('/add', authenticateToken, controller.addToWishlist)
 
 /**
  * @swagger
- * /user/wishlist:
+ * /api/wishlist:
  *     delete:
  *         summary: Request for add apartment to wishlist
  *         tags: [Wishlist]

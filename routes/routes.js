@@ -8,6 +8,8 @@ const roommateFinderRouter = require('./roommate_finder');
 const messageRouter = require('./message');
 const recomendationRouter = require('./recomendation');
 const fixedValuesRouter = require('./fixed-values');
+// wishlist
+const wishlistRouter = require('./wishlist');
 
 
 router.use('/auth', authRouter);
@@ -18,6 +20,8 @@ router.use('/roommate_finder', roommateFinderRouter);
 router.use('/message', messageRouter);
 router.use('/recomendation', recomendationRouter);
 router.use('/fixed-values', fixedValuesRouter);
+// wishlist
+router.use('/wishlist', wishlistRouter);
 
 module.exports = router;
 
