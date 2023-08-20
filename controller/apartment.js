@@ -19,9 +19,12 @@ class ApartmentController {
 
   add = async (req, res) => {
     console.log("ApartmentController::add");
-    const { data, error } = await repo.add(req.body);
+    const { data, error, code } = await repo.add(req.body);
     if (error) {
-      res.status(500).json(error);
+      res.status(code).json({
+        message: error,
+        code: code,
+      });
       return;
     }
     res.status(200).json(data);

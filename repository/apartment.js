@@ -32,13 +32,17 @@ class ApartmentRepository {
       .eq("id", id)
       .single();
     if (error) {
-      console.log(error);
-      return null;
+      console.log(`ApartmentRepository::findApartmentById:: error: ${error}`);
+      console.log(error)
+      return {
+        error: "Apartment not found",
+        code: 404,
+      }
     }
 
     delete data.location_id;
 
-    return data;
+    return {data};
   };
 
   add = async (params) => {
