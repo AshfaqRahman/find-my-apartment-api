@@ -53,7 +53,8 @@ const controller = new UserController();
  *               type: object
  */
 
-router.post("/", authenticateToken, controller.preference);
+router.post("/", authenticateToken, controller.setPreference);
+router.get("/", authenticateToken, controller.getPreference);
 
 /**
  * @swagger
