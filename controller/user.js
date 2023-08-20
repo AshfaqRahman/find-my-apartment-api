@@ -9,6 +9,7 @@ class UserController {
     const { data, error } = await repo.setPreference(req.body);
     if (error) {
       res.status(500).json(error);
+      return;
     }
     res.status(200).json(data);
   };
@@ -19,6 +20,18 @@ class UserController {
     const { data, error } = await repo.getPreference(req.body);
     if (error) {
       res.status(500).json(error);
+      return;
+    }
+    res.status(200).json(data[0]);
+  };
+
+
+  getUserInfo = async (req, res) => {
+    console.log("UserController::getUserInfo");
+    const { data, error } = await repo.getUserInfo(req.body);
+    if (error) {
+      res.status(500).json(error);
+      return;
     }
     res.status(200).json(data[0]);
   };
