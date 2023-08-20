@@ -6,22 +6,32 @@ class WishlistController {
     console.log("WishlistController::addToWishlist");
     const user_id = req.body.user.id;
     const apartment_id = req.body.apartment_id;
-    const {data, error_message, code} = await repo.addToWishlist(user_id, apartment_id);
-    if(error_message){
+    const {data, error, code} = await repo.addToWishlist(user_id, apartment_id);
+    if(error){
       res.status(code).json({
         code : code,
-        message: error_message,
+        message: error,
       });
       return;
     }
-    res.status(code).json(data);
+    res.status(201).json(data);
   }
 
   getWishlist = async (req, res) => {
     console.log("WishlistController::getAllWishlist");
     const id = req.body.user.id;
-    const data = await repo.getWishlist(id);
-    res.json(data);
+    const {data, error, code} = await repo.getWishlist(id);
+    console.log(data);
+    if(error){
+      console.log(`WishlistController::getAllWishlist:: error: ${error}`);
+      res.status(code).json({
+        code : code,
+        message: error,
+      });
+      return;
+    }
+
+    res.status(200).json(data);
   };
 }
 
