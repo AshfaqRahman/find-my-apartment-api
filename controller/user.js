@@ -20,7 +20,7 @@ class UserController {
     if (error) {
       res.status(500).json(error);
     }
-    res.status(200).json(data);
+    res.status(200).json(data[0]);
   };
 
 }
