@@ -22,6 +22,7 @@ class ApartmentController {
     const { data, error } = await repo.add(req.body);
     if (error) {
       res.status(500).json(error);
+      return;
     }
     res.status(200).json(data);
   };
