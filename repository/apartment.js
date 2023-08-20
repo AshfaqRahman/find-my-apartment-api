@@ -20,13 +20,14 @@ class ApartmentRepository {
       // location_id is a foreign key
       // https://stackoverflow.com/questions/76107620/supabase-query-go-get-parent-record-with-at-least-one-child-record
       // https://stackoverflow.com/questions/75224153/query-from-multiple-tables-in-supabase
+      // add a field is exist in wishlist
       .select(
         `
             *, 
             location: Location!inner(*),
             images: ApartmentImages!inner(image_url),
             facilities: ApartmentFacilities(facility:Facilities(title)), 
-            startpoints: ApartmentStarPoints(starpoint:Starpoints(title))
+            starpoints: ApartmentStarPoints(starpoint:Starpoints(title))
             `
       ) //
       .eq("id", id)
