@@ -98,14 +98,39 @@ class UserRepository {
           keywords: UserPreferenceStarpoints(starpoint:Starpoints(starpoint_id, title))
         `
       )
-      .eq("user_id", params.user.id)
-      
-      ;
+      .eq("user_id", params.user.id) ;
+
       if(userPreference.error) throw userPreference.error;
       return { data: userPreference.data }
 
     } catch (error) {
       console.log("UserRepository::getPreference:: error: " + error);
+      return { error: { message: error.message } };
+    }
+  };
+
+  getUserInfo = async (params) => {
+    console.log("UserRepository::getUserInfo");
+    try {
+      let userInfo = await supabase
+      .from("users")
+      .select(
+        `
+          first_name,
+          last_name,
+          email,
+          phone_no,
+          gender
+        `
+      )
+      .eq("id", params.user.id);
+      console.log(userInfo);
+
+      if(userInfo.error) throw userInfo.error;
+      return { data: userInfo.data }
+
+    } catch (error) {
+      console.log("UserRepository::getUserInfo:: error: " + error);
       return { error: { message: error.message } };
     }
   };
