@@ -63,7 +63,10 @@ class AuthController {
         delete data.password;
 
         // generate a jwt token
-        const jwt = generateJwtToken(data);
+        const jwt = generateJwtToken({
+            email: data.email,
+            id: data.id,
+        });
 
         if (match) {
             res.status(200).json({ token: jwt, data});
