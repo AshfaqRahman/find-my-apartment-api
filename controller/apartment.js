@@ -13,7 +13,13 @@ class ApartmentController {
   findApartmentById = async (req, res) => {
     console.log("ApartmentController::findApartmentById");
     const { id } = req.params;
-    const data = await repo.findApartmentById(id);
+    const {data, error} = await repo.findApartmentById(id);
+    if (error) {
+      res.status(404).json({
+        message: error,
+        code: 404,
+      });
+    }
     res.json(data);
   };
 
