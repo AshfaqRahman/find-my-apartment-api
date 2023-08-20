@@ -138,6 +138,7 @@ class ApartmentRepository {
           `
                 *, 
                 location: Location!inner(*),
+                images: ApartmentImages!inner(image_url),
                 facilities: ApartmentFacilities(facility:Facilities(facilities_id, title)), 
                 starpoints: ApartmentStarPoints(starpoint:Starpoints(starpoint_id, title))
                 `
