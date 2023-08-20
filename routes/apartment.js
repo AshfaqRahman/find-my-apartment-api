@@ -1,11 +1,11 @@
-const PromiseRouter = require("express-promise-router");
+const express = require('express');
+const router = express.Router();
 const apartments = require("../db/apartment");
 const savedSearches = require("../db/apartment-search");
 const ApartmentController = require('../controller/apartment');
 const { authenticateToken } = require("../config/authorization.js");
 
 
-const router = PromiseRouter();
 const controller = new ApartmentController();
 
 // create swagger apartmet schema
@@ -191,27 +191,7 @@ router.get('/:id', controller.findApartmentById)
     *
 */
 
-router.post('/add', (req, res) => {
-    let apartment = {
-        "type": req.body.type,
-        "images": req.body.images,
-        "blueprints": req.body.blueprints,
-        "floor": req.body.floor,
-        "area_sqft": req.body.area_sqft,
-        "bedroom": req.body.bedroom,
-        "washroom": req.body.washroom,
-        "rent": req.body.rent,
-        "location": req.body.location,
-        "zone": req.body.zone,
-        "area": req.body.area,
-        "facilities": req.body.facilities,
-        "description": req.body.description,
-        "star_points": req.body.star_points
-    }
-    res.send({
-        message: "Apartment added successfully",
-    }).status(200);
-})
+router.post('/add', authenticateToken, controller.add);
 
 
 /**
@@ -444,7 +424,7 @@ router.get("/search", (req, res) => {
  *             example:
  *               searchResults: []
  */
-router.get("/", controller.advanceSearch)
+router.get("/", authenticateToken, controller.advanceSearch)
 
 
 /**

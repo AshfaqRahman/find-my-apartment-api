@@ -19,7 +19,7 @@ class AuthRepository{
         }
 
         if (user.length > 0) {
-            return { error: 'User already exists' }
+            return { error: 'This email is already registered' }
         }   
 
         // create user
@@ -27,7 +27,8 @@ class AuthRepository{
             .from('users')
             .insert([
                 {
-                    name: params.first_name + ' ' + params.last_name,
+                    first_name: params.first_name,
+                    last_name: params.last_name,
                     email: params.email,
                     password: params.password,
                     phone_no: params.phone_no,
@@ -65,7 +66,7 @@ class AuthRepository{
         }
 
         if (user.length == 0) {
-            return { error: 'User does not exist' }
+            return { message: 'User does not exist' }
         }
 
         return { data: user[0] }

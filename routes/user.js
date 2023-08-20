@@ -4,6 +4,10 @@ const apartments = require("../db/apartment");
 const users = require("../db/user");
 const myPreferenceRouter = require('./my-preference');
 const wishlistRouter = require('./wishlist');
+const UserController = require('../controller/user');
+const { authenticateToken } = require("../config/authorization.js");
+
+const controller = new UserController();
 
 /**
  * @swagger
@@ -12,6 +16,7 @@ const wishlistRouter = require('./wishlist');
  *  description: user profile endpoints
  */
 
+router.use('/profile', authenticateToken, controller.getUserInfo);
 router.use('/my-preference', myPreferenceRouter);
 router.use('/wishlist', wishlistRouter);
 
@@ -32,11 +37,11 @@ router.use('/wishlist', wishlistRouter);
     *                                  
     *
 */
-router.get('/profile', (req, res) => {
-    res.send(
-        users[0]
-    )
-})
+// router.get('/profile', (req, res) => {
+//     res.send(
+//         users[0]
+//     )
+// })
 
 /**
  * @swagger

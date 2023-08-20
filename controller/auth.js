@@ -63,13 +63,27 @@ class AuthController {
         delete data.password;
 
         // generate a jwt token
-        const jwt = generateJwtToken(data);
+        const jwt = generateJwtToken({
+            email: data.email,
+            id: data.id,
+        });
 
         if (match) {
             res.status(200).json({ token: jwt, data});
         } else {
             res.status(401).json({ error: 'Invalid credentials' });
         }
+    }
+
+    logout = async function (req, res) {
+        console.log("AuthController:: logout");
+        
+        return res.status(200).json({ message: "Logged out successfully" });
+    }
+
+    isLoggedIn = async (req, res) => {
+        console.log("AuthController:: isLoggedIn");
+        return res.status(200).json({ message: "Already Logged in" });
     }
 
 }

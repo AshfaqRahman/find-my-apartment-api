@@ -1,6 +1,9 @@
 const express = require("express");
 const { route } = require("./auth");
 const router = express.Router();
+const { authenticateToken } = require("../config/authorization.js");
+const UserController = require('../controller/user');
+const controller = new UserController();
 
 /**
  * @swagger
@@ -50,27 +53,8 @@ const router = express.Router();
  *               type: object
  */
 
-router.post("/", (req, res) => {
-  let req_obj = {
-    type: req.body.type,
-    location: req.body.location,
-    bedroom: req.body.bedroom,
-    washroom: req.body.washroom,
-    price_min: req.body.price_min,
-    price_max: req.body.price_max,
-    area_min: req.body.area_min,
-    area_max: req.body.area_max,
-    facilities: req.body.facilities,
-    star_points: req.body.star_points,
-    workplace: req.body.workplace,
-  };
-  console.log(req_obj);
-  res
-    .send({
-      message: `your preference is saved successfully`,
-    })
-    .status(200);
-});
+router.post("/", authenticateToken, controller.setPreference);
+router.get("/", authenticateToken, controller.getPreference);
 
 /**
  * @swagger
