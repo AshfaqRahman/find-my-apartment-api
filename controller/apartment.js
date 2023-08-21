@@ -43,6 +43,7 @@ class ApartmentController {
 
     // js object
     const params = {
+      user_id: req.body.user.id,
       apartmentTypes:
         req.query.apartmentTypes === undefined
           ? [1, 2, 3]
@@ -84,9 +85,13 @@ class ApartmentController {
         params.baths.push(i);
       }
     }
-    let data = await repo.advanceSearch(params);
+    let data = await repo.advanceSearchQuery(params);
 
-    data = data.filter((apartment) => {
+    console.log("found from database: ", data.length);
+
+    //return res.status(200).json(data);
+
+    /* data = data.filter((apartment) => {
       let facilities = apartment.facilities.map(
         (facility) => facility.facility.facilities_id
       );
@@ -105,7 +110,7 @@ class ApartmentController {
             (type) => apartment.types.includes(type)
           ))
       );
-    });
+    }); */
 
     let center = req.query.location;
     let radius = +req.query.radius;
