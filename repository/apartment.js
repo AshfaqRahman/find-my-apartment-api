@@ -111,6 +111,7 @@ class ApartmentRepository {
   advanceSearch = async (params) => {
     try {
       const {
+        user_id,
         beds, // e.g. ['1', '2', '3']
         baths,
         price_min,
@@ -118,9 +119,22 @@ class ApartmentRepository {
         area_min,
         area_max,
       } = params;
+      console.log("user_id: " + user_id);
+
+      let { data, error } = await supabase
+  .rpc('advance_search', {
+    curr_user_id: user_id, 
+    s_bedrooms : beds, 
+    s_max_area: area_max,
+    s_max_price: price_max, 
+    s_min_area: area_min,
+    s_min_price: price_min, 
+    s_washrooms: baths  
+  })
+
 
       // console.log(params)
-      const { data, error } = await supabase
+      /* const { data, error } = await supabase
         .from("Apartment")
         .select(
           `
@@ -136,7 +150,7 @@ class ApartmentRepository {
         .gte("price", price_min)
         .lte("price", price_max)
         .gte("area_sqft", area_min)
-        .lte("area_sqft", area_max);
+        .lte("area_sqft", area_max); */
       if (error) {
         // console.log("Error performing advanced search:", error.message)
         throw error;
@@ -151,6 +165,93 @@ class ApartmentRepository {
       return null;
     }
   };
+
+  advanceSearchQuery = async (params) => {
+
+    const query = `
+    SELECT
+        a.id,
+        a.bedrooms,
+        a.washrooms,
+        a.area_sqft,
+        a.price,
+        a.blueprint_url,
+        a.created_at,
+        a.owner_id,
+        a.vacancy,
+        a.description,
+        a.floor,
+        a.types,
+        to_jsonb(array_agg("ApartmentImages".image_url)) as images,
+        (
+            SELECT to_jsonb(array_agg("Facilities".title))
+            FROM "ApartmentFacilities"
+            JOIN "Facilities" ON "ApartmentFacilities".facilities_id = "Facilities".facilities_id
+            WHERE "ApartmentFacilities".apartment_id = a.id
+        ) as facilities,
+        (
+            SELECT to_jsonb(array_agg("Starpoints".title))
+            FROM "ApartmentStarPoints"
+            JOIN "Starpoints" ON "ApartmentStarPoints".starpoint_id = "Starpoints".starpoint_id
+            WHERE "ApartmentStarPoints".apartment_id = a.id
+        ) as starpoints,
+        EXISTS (
+            SELECT 1
+            FROM "Wishlist"
+            WHERE apartment_id = a.id AND user_id = $1
+        ) as in_wishlist,
+        (
+            SELECT jsonb_build_object(
+                'division', l.division,
+                'district', l.district,
+                'zone', l.zone,
+                'street_no', l.street_no,
+                'house_no', l.house_no,
+                'latitude', l.latitude,
+                'longitude', l.longitude,
+                'created_at', l.created_at,
+                'detailed_address', l.detailed_address
+            ) AS location
+            FROM "Location" AS l
+            WHERE l.id = a.location_id
+        ) AS location
+    FROM
+        "Apartment" as a
+    JOIN "ApartmentImages" ON a.id = "ApartmentImages".apartment_id
+    WHERE
+        a.bedrooms = ANY($2)
+        AND a.washrooms = ANY($3)
+        AND a.price >= $4
+        AND a.price <= $5
+        AND a.area_sqft >= $6
+        AND a.area_sqft <= $7
+    GROUP BY
+        a.id;
+  `;
+
+    const values = [
+      params.user_id,
+      params.beds,
+      params.baths,
+      params.price_min,
+      params.price_max,
+      params.area_min,
+      params.area_max,
+    ];
+
+    console.log("AdvanceSearchQuery::query: "+values); 
+
+    // db query
+    const db = await getConnection();
+    const data = await db.query(query, values);
+
+    db.release();
+
+    return data.rows;
+
+  };
+
+
 }
 
 // export
