@@ -40,7 +40,7 @@ class ApartmentController {
   myApartments = async (req, res) => {
     console.log("ApartmentController::myApartments");
     const user_id = req.body.user.id;
-    const { data, error, code } = await repo.myApartments(user_id);
+    const { data, error, code } = await repo.getApartmentByUser(user_id);
     if (error) {
       res.status(code).json({
         message: error,

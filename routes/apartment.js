@@ -195,7 +195,7 @@ router.post('/add', authenticateToken, controller.add);
 
 
 // my apartment route
-router.get('/self', authenticateToken, controller.myApartments);
+router.get('/my/apartments', authenticateToken, controller.myApartments);
 
 /**
  * @swagger
