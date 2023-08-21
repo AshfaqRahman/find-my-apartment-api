@@ -12,34 +12,33 @@ class ApartmentRepository {
   };
 
   findApartmentById = async (curr_user_id, f_apartment_id) => {
-    let { data, error } = await supabase.rpc('get_apartment_details', {
-            curr_user_id, f_apartment_id
-          })
+    let { data, error } = await supabase.rpc("get_apartment_details", {
+      curr_user_id,
+      f_apartment_id,
+    });
 
     if (error) {
       console.log(`ApartmentRepository::findApartmentById:: error: ${error}`);
-      console.log(error)
+      console.log(error);
       return {
         error: "Apartment not found",
         code: 404,
-      }
+      };
     }
 
-    return {data:data[0]};
+    return { data: data[0] };
   };
-
 
   add = async (params) => {
     console.log("ApartmentRepository::add");
 
     try {
-
       let locationParams = params.location;
       let location = await supabase
         .from("Location")
         .insert(locationParams)
         .select();
-      if(location.error) throw location.error;
+      if (location.error) throw location.error;
 
       console.log("ApartmentRepository::add:: location inserted successfully");
 
@@ -103,7 +102,7 @@ class ApartmentRepository {
       };
     } catch (error) {
       console.log("ApatientRepository::add:: error: " + error);
-      return { error: {message: error.message} };
+      return { error: { message: error.message } };
     }
   };
 
@@ -121,17 +120,15 @@ class ApartmentRepository {
       } = params;
       console.log("user_id: " + user_id);
 
-      let { data, error } = await supabase
-  .rpc('advance_search', {
-    curr_user_id: user_id, 
-    s_bedrooms : beds, 
-    s_max_area: area_max,
-    s_max_price: price_max, 
-    s_min_area: area_min,
-    s_min_price: price_min, 
-    s_washrooms: baths  
-  })
-
+      let { data, error } = await supabase.rpc("advance_search", {
+        curr_user_id: user_id,
+        s_bedrooms: beds,
+        s_max_area: area_max,
+        s_max_price: price_max,
+        s_min_area: area_min,
+        s_min_price: price_min,
+        s_washrooms: baths,
+      });
 
       // console.log(params)
       /* const { data, error } = await supabase
@@ -167,7 +164,6 @@ class ApartmentRepository {
   };
 
   advanceSearchQuery = async (params) => {
-
     const query = `
     SELECT
         a.id,
@@ -225,16 +221,35 @@ class ApartmentRepository {
         AND a.price <= $5
         AND a.area_sqft >= $6
         AND a.area_sqft <= $7
-        AND a.id IN (
+        AND (a.id IN (
           SELECT apartment_id
           FROM "ApartmentFacilities"
-          WHERE facilities_id IN ANY($8)
+          WHERE facilities_id = ANY($8)
+          GROUP BY apartment_id
+          HAVING COUNT(DISTINCT facilities_id) = array_length($8, 1)
         )
-        AND a.id IN (
+          OR NOT EXISTS (
+            select 1 
+            from "ApartmentFacilities"
+            where facilities_id = ANY($8)
+          )
+        )
+        AND (a.id IN (
             SELECT apartment_id
             FROM "ApartmentStarPoints"
-            WHERE starpoint_id IN ANY($9)
+
+            WHERE starpoint_id = ANY($9)
+            GROUP BY apartment_id
+            HAVING COUNT(DISTINCT starpoint_id) = array_length($9, 1)
         )
+          
+          OR NOT EXISTS (
+            select 1 
+            from "ApartmentStarPoints"
+            where starpoint_id = ANY($9)
+          )
+        )
+        AND a.types && $10
     GROUP BY
         a.id;
   `;
@@ -249,9 +264,10 @@ class ApartmentRepository {
       params.area_max,
       params.facilities,
       params.keywords,
+      params.apartmentTypes
     ];
 
-    console.log("AdvanceSearchQuery::query: "+values); 
+    console.log("AdvanceSearchQuery::query: " + values);
 
     // db query
     const db = await getConnection();
@@ -260,10 +276,7 @@ class ApartmentRepository {
     db.release();
 
     return data.rows;
-
   };
-
-
 }
 
 // export
