@@ -10,7 +10,8 @@ class WishlistRepository {
     let { data, error }  = await supabase
       .from("Wishlist")
       .insert({user_id: user_id, apartment_id: apartment_id})
-      .select(); // select all rows after insert
+      .select()
+      .single(); // select 
     
 
     if(error){
@@ -24,22 +25,7 @@ class WishlistRepository {
 
     console.log("Wishlist::addToWishlist:: inserted successfully");
 
-    // select all wishlist 
-
-    const { data: wishlist, error: wishlistError }  = await supabase
-      .from("Wishlist")
-      .select(`apartment_id`)
-      .eq('user_id', user_id); // select all rows after insert
-    
-    console.log(`Wishlist::addToWishlist:: wishlist: ${wishlist}`);
-    
-    if(wishlistError){
-      return { error: "Internal Server Error!", code: 500 }
-    }
-
-    console.log("Wishlist::addToWishlist:: returning data");
-
-    return {data: wishlist};
+    return {data};
   };
     
 
