@@ -194,6 +194,9 @@ router.get('/:id', authenticateToken, controller.findApartmentById)
 router.post('/add', authenticateToken, controller.add);
 
 
+// my apartment route
+router.get('/self', authenticateToken, controller.myApartments);
+
 /**
  * @swagger
  * /api/apartments/search:

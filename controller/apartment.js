@@ -37,6 +37,20 @@ class ApartmentController {
     res.status(200).json(data);
   };
 
+  myApartments = async (req, res) => {
+    console.log("ApartmentController::myApartments");
+    const user_id = req.body.user.id;
+    const { data, error, code } = await repo.myApartments(user_id);
+    if (error) {
+      res.status(code).json({
+        message: error,
+        code: code,
+      });
+      return;
+    }
+    res.status(200).json(data);
+  };
+
   // advance search with filters
   advanceSearch = async (req, res) => {
     console.log("ApartmentController::advanceSearch");

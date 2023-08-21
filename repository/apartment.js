@@ -277,6 +277,74 @@ class ApartmentRepository {
 
     return data.rows;
   };
+
+  getApartmentByUser = async (user_id) => {
+    console.log("Wishlist::getAllWishlist");
+    const query = `
+      SELECT
+          a.id,
+          a.bedrooms,
+          a.washrooms,
+          a.area_sqft,
+          a.price,
+          a.blueprint_url,
+          a.created_at,
+          a.owner_id,
+          a.vacancy,
+          a.description,
+          a.floor,
+          a.types,
+          to_jsonb(array_agg("ApartmentImages".image_url)) as images,
+          (
+              SELECT to_jsonb(array_agg("Facilities".title))
+              FROM "ApartmentFacilities"
+              JOIN "Facilities" ON "ApartmentFacilities".facilities_id = "Facilities".facilities_id
+              WHERE "ApartmentFacilities".apartment_id = a.id
+          ) as facilities,
+          (
+              SELECT to_jsonb(array_agg("Starpoints".title))
+              FROM "ApartmentStarPoints"
+              JOIN "Starpoints" ON "ApartmentStarPoints".starpoint_id = "Starpoints".starpoint_id
+              WHERE "ApartmentStarPoints".apartment_id = a.id
+          ) as starpoints,
+          EXISTS (
+              SELECT 1
+              FROM "Wishlist"
+              WHERE apartment_id = a.id AND user_id = $1
+          ) as in_wishlist,
+          (
+              SELECT jsonb_build_object(
+                  'division', l.division,
+                  'district', l.district,
+                  'zone', l.zone,
+                  'street_no', l.street_no,
+                  'house_no', l.house_no,
+                  'latitude', l.latitude,
+                  'longitude', l.longitude,
+                  'created_at', l.created_at,
+                  'detailed_address', l.detailed_address
+              ) AS location
+              FROM "Location" AS l
+              WHERE l.id = a.location_id
+          ) AS location
+      FROM
+      "Apartment" as a
+      JOIN "ApartmentImages" ON a.id = "ApartmentImages".apartment_id
+      WHERE a.owner_id = $1
+      GROUP BY
+          a.id;
+    `;
+
+    // get connection
+    const db = await getConnection();
+    // execute query
+    const { rows } = await db.query(query, [user_id]);
+    // release connection
+    db.release();
+
+    return { data: rows };
+  };
+
 }
 
 // export
