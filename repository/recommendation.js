@@ -89,11 +89,11 @@ class RecommendationRepository{
 
     // db query
     const db = await getConnection();
-    const data = await db.query(query, values);
+    const data = await db.query(query, [user_id]);
 
     db.release();
 
-    return data.rows;
+    return {data: data.rows};
   };
 };
 
