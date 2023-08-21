@@ -225,6 +225,16 @@ class ApartmentRepository {
         AND a.price <= $5
         AND a.area_sqft >= $6
         AND a.area_sqft <= $7
+        AND a.id IN (
+          SELECT apartment_id
+          FROM "ApartmentFacilities"
+          WHERE facilities_id IN ANY($8)
+        )
+        AND a.id IN (
+            SELECT apartment_id
+            FROM "ApartmentStarPoints"
+            WHERE starpoint_id IN ANY($9)
+        )
     GROUP BY
         a.id;
   `;
@@ -237,6 +247,8 @@ class ApartmentRepository {
       params.price_max,
       params.area_min,
       params.area_max,
+      params.facilities,
+      params.keywords,
     ];
 
     console.log("AdvanceSearchQuery::query: "+values); 
