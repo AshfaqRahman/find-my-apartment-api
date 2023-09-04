@@ -12,6 +12,7 @@ const fixedValuesRouter = require('./fixed-values');
 const wishlistRouter = require('./wishlist');
 // recommendation
 const recommendationRouter = require('./recomendation');
+const postRouter = require('./post')
 
 
 router.use('/auth', authRouter);
@@ -26,6 +27,8 @@ router.use('/fixed-values', fixedValuesRouter);
 router.use('/wishlist', wishlistRouter);
 // recommendation
 router.use('/recommendation', recommendationRouter);
+// post
+router.use('/post', postRouter);
 
 module.exports = router;
 
