@@ -186,6 +186,12 @@ class ApartmentRepository {
             WHERE "ApartmentFacilities".apartment_id = a.id
         ) as facilities,
         (
+            SELECT COUNT(*)
+            FROM "ApartmentFacilities"
+            JOIN "Facilities" ON "ApartmentFacilities".facilities_id = "Facilities".facilities_id
+            WHERE "ApartmentFacilities".apartment_id = a.id
+        ) as fac_count,
+        (
             SELECT to_jsonb(array_agg("Starpoints".title))
             FROM "ApartmentStarPoints"
             JOIN "Starpoints" ON "ApartmentStarPoints".starpoint_id = "Starpoints".starpoint_id
@@ -272,6 +278,8 @@ class ApartmentRepository {
     // db query
     const db = await getConnection();
     const data = await db.query(query, values);
+
+    console.log(data.facilitiesCount);
 
     db.release();
 

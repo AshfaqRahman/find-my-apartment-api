@@ -15,6 +15,12 @@ class PostController {
         }
         res.status(200).json(data);
     };
+
+    fetchAllPosts = async (req, res) => {
+        console.log("PostController::fetchAllPosts");
+        const data = await repo.fetchAllPosts();
+        res.json(data);
+    }
 }
 
 module.exports = PostController;

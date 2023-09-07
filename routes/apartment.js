@@ -78,8 +78,6 @@ const controller = new ApartmentController();
  */
 
 
-
-
 // create swagger tag
 /**
  * @swagger
@@ -87,7 +85,6 @@ const controller = new ApartmentController();
  *  name: Apartments
  *  description: Apartment management
  */
-
 
 
 /** 

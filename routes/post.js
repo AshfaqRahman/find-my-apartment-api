@@ -6,6 +6,8 @@ const { authenticateToken } = require("../config/authorization.js");
 
 const controller = new PostController();
 
+router.get('/', authenticateToken, controller.fetchAllPosts);
+
 router.post('/', authenticateToken, controller.postSubmit);
 
 module.exports = router;

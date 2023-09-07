@@ -1,4 +1,4 @@
-// const { getConnection } = require("../config/database");
+const { getConnection } = require("../config/database");
 const supabase = require("../config/supabase");
 
 class PostRepository {
@@ -64,6 +64,16 @@ class PostRepository {
     } catch (error) {
         console.log("Maruf ", error);
     }
+  };
+
+  fetchAllPosts = async () => {
+    console.log("PostRepository::fetchAllPosts");
+
+    const db = await getConnection();
+    const data = await db.query(`SELECT * FROM "Post"`);
+    db.release();
+
+    return data.rows;
   };
 }
 
