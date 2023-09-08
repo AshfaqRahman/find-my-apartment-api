@@ -5,8 +5,6 @@ class PostRepository {
   postSubmit = async (params) => {
     console.log("PostRepository::postSubmit");
 
-    console.log(params);
-
     try {
       let locationParams = params.location;
       let location = await supabase
@@ -15,54 +13,54 @@ class PostRepository {
         .select();
       if (location.error) throw location.error;
 
-      let { data, error } = await supabase
+      console.log("PostRepository::postSubmit:: location inserted successfully");
+
+      let postParams = params.post_data;
+      postParams.location_id = location.data[0].id;
+      postParams.owner_id = params.user.id;
+      let postRow = await supabase
         .from("Post")
-        .insert({
-          apartment_id: params.apartment_id,
-          post_title: params.post_title,
-          post_body: params.post_body,
-          post_owner: params.user.id,
-          bedrooms: params.bedrooms,
-          bathrooms: params.bathrooms,
-          price: params.price,
-          location_id: location.data[0].id,
-        })
-        .select()
-        .single();
+        .insert(postParams)
+        .select();
+      if (postRow.error) throw postRow.error;
 
-      if (error) {
-        console.log(error);
+      console.log(postParams);
 
-        return { error: "Internal Server Error", code: 500 };
-      }
+      console.log("PostRepository::postSubmit:: post inserted successfully");
 
-      console.log(data);
+      // let postFacilitiesParams = params.facilities.facility_ids.map((facility) => {
+      //     return {
+      //       post_id: postRow.data[0].id,
+      //       facilities_id: facility,
+      //     };
+      //   }
+      // );
+      // let facilities = await supabase
+      //   .from("PostFacilities")
+      //   .insert(postFacilitiesParams)
+      //   .select();
 
-      console.log("Post::postSubmit:: inserted successfully");
-      return { data };
+      // console.log("PostRepository::postSubmit:: facilities added successfully");
 
-      // const query =  `
-      // INSERT into Post(apartment_id, post_title, post_body, post_owner, ap_type, bedrooms, bathrooms, price, location)
-      // VALUES
-      // ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      // `
+      // let postStarpointsParams = params.keywords.starpoint_ids.map((starpoint) => {
+      //     return {
+      //       post_id: postRow.data[0].id,
+      //       starpoint_id: starpoint,
+      //     };
+      //   }
+      // );
+      // let starpoints = await supabase
+      //   .from("PostStarPoints")
+      //   .insert(postStarpointsParams)
+      //   .select();
 
-      // const values = [
-      //     params.id,
-      //     params.apartment_id,
-      //     params.post_title,
-      //     params.post_body,
-      //     params.post_owner
-      // ]
+      // console.log("PostRepository::add:: starpoints added successfully");
+      
 
-      // const db = await getConnection();
-      // const data = await db.query(query, values);
-
-      // db.release();
-
-      // return data.rows;
+      return { data : "successfully added post" };
     } catch (error) {
-        console.log("Maruf ", error);
+        console.log("PostRepository::postSubmit::Error ", error);
+        return { error: "Internal Server Error", code: 500 };
     }
   };
 
