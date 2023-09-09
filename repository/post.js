@@ -17,7 +17,7 @@ class PostRepository {
 
       let postParams = params.post_data;
       postParams.location_id = location.data[0].id;
-      postParams.owner_id = params.user.id;
+      postParams.post_owner = params.user.id;
       let postRow = await supabase
         .from("Post")
         .insert(postParams)
@@ -28,33 +28,33 @@ class PostRepository {
 
       console.log("PostRepository::postSubmit:: post inserted successfully");
 
-      // let postFacilitiesParams = params.facilities.facility_ids.map((facility) => {
-      //     return {
-      //       post_id: postRow.data[0].id,
-      //       facilities_id: facility,
-      //     };
-      //   }
-      // );
-      // let facilities = await supabase
-      //   .from("PostFacilities")
-      //   .insert(postFacilitiesParams)
-      //   .select();
+      let postFacilitiesParams = params.facilities.facility_ids.map((facility) => {
+          return {
+            post_id: postRow.data[0].id,
+            facilities_id: facility,
+          };
+        }
+      );
+      let facilities = await supabase
+        .from("PostFacilities")
+        .insert(postFacilitiesParams)
+        .select();
 
-      // console.log("PostRepository::postSubmit:: facilities added successfully");
+      console.log("PostRepository::postSubmit:: facilities added successfully");
 
-      // let postStarpointsParams = params.keywords.starpoint_ids.map((starpoint) => {
-      //     return {
-      //       post_id: postRow.data[0].id,
-      //       starpoint_id: starpoint,
-      //     };
-      //   }
-      // );
-      // let starpoints = await supabase
-      //   .from("PostStarPoints")
-      //   .insert(postStarpointsParams)
-      //   .select();
+      let postStarpointsParams = params.keywords.starpoint_ids.map((starpoint) => {
+          return {
+            post_id: postRow.data[0].id,
+            starpoint_id: starpoint,
+          };
+        }
+      );
+      let starpoints = await supabase
+        .from("PostStarPoints")
+        .insert(postStarpointsParams)
+        .select();
 
-      // console.log("PostRepository::add:: starpoints added successfully");
+      console.log("PostRepository::add:: starpoints added successfully");
       
 
       return { data : "successfully added post" };
