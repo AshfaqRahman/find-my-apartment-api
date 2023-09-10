@@ -174,7 +174,7 @@ class ApartmentRepository {
         a.blueprint_url,
         a.created_at,
         a.owner_id,
-        a.vacancy,
+        a.occupied,
         a.description,
         a.floor,
         a.types,
@@ -270,10 +270,10 @@ class ApartmentRepository {
       params.area_max,
       params.facilities,
       params.keywords,
-      params.apartmentTypes
+      params.apartmentTypes,
     ];
 
-    console.log("AdvanceSearchQuery::query: " + values);
+    console.log("AdvanceSearchQuery::query:");
 
     // db query
     const db = await getConnection();
@@ -287,7 +287,7 @@ class ApartmentRepository {
   };
 
   getApartmentByUser = async (user_id) => {
-    console.log("Wishlist::getAllWishlist");
+    console.log("ApartmentRepository::getApartmentByUser");
     const query = `
       SELECT
           a.id,
@@ -298,7 +298,7 @@ class ApartmentRepository {
           a.blueprint_url,
           a.created_at,
           a.owner_id,
-          a.vacancy,
+          a.occupied,
           a.description,
           a.floor,
           a.types,
@@ -353,6 +353,72 @@ class ApartmentRepository {
     return { data: rows };
   };
 
+  toggleStatus = async (params) => {
+    // console.log(params);
+
+    // update
+    try {
+      let query = `
+        update "Apartment"  
+        set
+          occupied = $1
+        where
+          owner_id = $2
+          and id = $3;
+      `;
+
+      let values = [params.occupied, params.user.id, params.apartment_id];
+
+      const db = await getConnection();
+      const data = await db.query(query, values);
+
+      db.release();
+
+      return {
+        data: {
+          message: params.occupied
+            ? `apartment is now occupied`
+            : `apartment is now vacant`,
+        },
+      };
+    } catch (error) {
+      console.log("toggleStatus:: error :: ", error.message);
+      return {
+        error: error.message,
+      };
+    }
+  };
+
+  deleteApartment = async (params) => {
+    console.log("ApartmentRepository::deleteApartment");
+    console.log(params);
+    try {
+      let query = `
+        delete from "Apartment"
+        where
+          id = $1 and
+          owner_id = $2;
+      `;
+
+      let values = [params.apartment_id, params.user_id];
+
+      const db = await getConnection();
+      const data = await db.query(query, values);
+
+      db.release();
+
+      return {
+        data: {
+          message: `your apartment is deleted`,
+        },
+      };
+    } catch (error) {
+      console.log("deleteApartment:: error :: ", error);
+      return {
+        error: error.message,
+      };
+    }
+  };
 }
 
 // export

@@ -164,6 +164,49 @@ class ApartmentController {
     console.log("after filtering with radius: ", filteredData.length);
     res.status(200).json(filteredData);
   };
+
+  // advance search with filters
+  toggleStatus = async (req, res) => {
+    console.log("ApartmentController::toggleStatus");
+
+    
+    let {data, error} = await repo.toggleStatus(req.body);
+
+    if(error){
+      console.log(`ApartmentController::toggleStatus:: error: ${error}`);
+      res.status(500).json({
+        code : 500,
+        message: error,
+      });
+      return;
+    }
+
+    res.status(200).json(data);
+  };
+
+  // advance search with filters
+  deleteApartment = async (req, res) => {
+    console.log("ApartmentController::deleteApartment");
+
+    let params = {
+      user_id: req.body.user.id,
+      apartment_id: req.query.apartment_id,
+    }
+
+    
+    let {data, error} = await repo.deleteApartment(params);
+
+    if(error){
+      console.log(`ApartmentController::deleteApartment:: error: ${error}`);
+      res.status(500).json({
+        code : 500,
+        message: error,
+      });
+      return;
+    }
+
+    res.status(200).json(data);
+  };
 }
 
 module.exports = ApartmentController;

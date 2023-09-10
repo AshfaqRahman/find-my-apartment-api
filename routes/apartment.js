@@ -425,6 +425,7 @@ router.get("/search", (req, res) => {
  *               searchResults: []
  */
 router.get("/", authenticateToken, controller.advanceSearch)
+router.post("/status-toggle", authenticateToken, controller.toggleStatus)
 
 
 /**
@@ -614,13 +615,6 @@ router.patch('/', (req, res) => {
  *                   type: string
  */
 
-router.delete('/:apartmentId', (req, res) => {
-    const apartmentId = req.params.apartmentId;
-    // Perform the deletion logic for the apartment with the provided apartmentId
-    
-    res.status(200).json({
-        message: "Successfully removed the apartment"
-    });
-});
+router.delete('/', authenticateToken, controller.deleteApartment);
 
 module.exports = router;

@@ -60,7 +60,7 @@ class WishlistRepository {
           a.blueprint_url,
           a.created_at,
           a.owner_id,
-          a.vacancy,
+          a.occupied,
           a.description,
           a.floor,
           a.types,
