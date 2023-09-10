@@ -28,14 +28,19 @@ class ApartmentController {
     console.log("ApartmentController::add");
     const { data, error, code } = await repo.add(req.body);
     
-    // if (req.body.apartment.price < 0) {
-    //   res.status(500).json({
-    //     error: "Price negative",
-    //     message: "Price must be greater than 0",
-    //     code : 500
-    //   })
-    //   return
-    // }
+    if (error) {
+      res.status(code).json({
+        message: error,
+        code: code,
+      });
+      return;
+    }
+    res.status(200).json(data);
+  };
+
+  edit = async (req, res) => {
+    console.log("ApartmentController::edit");
+    const { data, error, code } = await repo.edit(req.body);
     
     if (error) {
       res.status(code).json({

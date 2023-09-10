@@ -583,11 +583,7 @@ router.get("/saved-searches/:search_id", (req, res) => {
  * 
  */
 
-router.patch('/', (req, res) => {
-    return res.send(
-        apartments[0]
-    );
-})
+router.patch('/', authenticateToken, controller.edit)
 
 
 /**

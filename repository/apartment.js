@@ -12,10 +12,12 @@ class ApartmentRepository {
   };
 
   findApartmentById = async (curr_user_id, f_apartment_id) => {
-    let { data, error } = await supabase.rpc("get_apartment_details", {
+    console.log("ApartmentRepository::findApartmentById");
+    let { data, error } = await supabase.rpc("fetch_apartment_details", {
       curr_user_id,
       f_apartment_id,
     });
+    console.log(data);
 
     if (error) {
       console.log(`ApartmentRepository::findApartmentById:: error: ${error}`);
@@ -106,6 +108,102 @@ class ApartmentRepository {
     }
   };
 
+  edit = async (params) => {
+    console.log("ApartmentRepository::edit");
+
+    try {
+      let apartmentParams = params.apartment;
+      apartmentParams.owner_id = params.user.id;
+      let apartmentRow = await supabase
+        .from("Apartment")
+        .update(apartmentParams)
+        .eq("id", apartmentParams.id)
+        .select();
+      if (apartmentRow.error) throw apartmentRow.error;
+      console.log("ApartmentRepository::edit:: apartment updated successfully");
+
+      let locationParams = params.location;
+      locationParams["id"] = apartmentRow.data[0].location_id;
+      let location = await supabase
+        .from("Location")
+        .update(locationParams)
+        .eq("id", locationParams.id)
+        .select();
+      if (location.error) throw location.error;
+      console.log("ApartmentRepository::edit:: location updated successfully");
+
+      let apartmentFacilitiesParams = params.facilities.facility_ids.map(
+        (facility) => {
+          return {
+            apartment_id: apartmentParams.id,
+            facilities_id: facility,
+          };
+        }
+      );
+      let facilities = await supabase
+        .from("ApartmentFacilities")
+        .delete()
+        .eq("apartment_id", apartmentParams.id);
+      if (facilities.error) throw facilities.error;
+      facilities = await supabase
+        .from("ApartmentFacilities")
+        .insert(apartmentFacilitiesParams)
+        .select();
+      if (facilities.error) throw facilities.error;
+      console.log(
+        "ApartmentRepository::edit:: facilities updated successfully"
+      );
+
+      let apartmentStarpointsParams = params.keywords.starpoint_ids.map(
+        (starpoint) => {
+          return {
+            apartment_id: apartmentRow.data[0].id,
+            starpoint_id: starpoint,
+          };
+        }
+      );
+      let starpoints = await supabase
+        .from("ApartmentStarPoints")
+        .delete()
+        .eq("apartment_id", apartmentParams.id);
+      if (starpoints.error) throw starpoints.error;
+      starpoints = await supabase
+        .from("ApartmentStarPoints")
+        .insert(apartmentStarpointsParams)
+        .select();
+      if (starpoints.error) throw starpoints.error;
+      console.log(
+        "ApartmentRepository::edit:: starpoints updated successfully"
+      );
+
+      let aparmtentImagesParams = params.images.image_urls.map((image) => {
+        return {
+          apartment_id: apartmentRow.data[0].id,
+          image_url: image,
+        };
+      });
+      let imageRow = await supabase
+        .from("ApartmentImages")
+        .delete()
+        .eq("apartment_id", apartmentParams.id);
+      if (imageRow.error) throw imageRow.error;
+      imageRow = await supabase
+        .from("ApartmentImages")
+        .insert(aparmtentImagesParams)
+        .select();
+      if (imageRow.error) throw imageRow.error;
+
+      console.log("ApartmentRepository::edit:: images updated successfully");
+
+      return {
+        data: "successfully edited your apartment",
+      };
+    } catch (error) {
+      console.log("ApatientRepository::edit:: error: " + error);
+      return { error: { message: error.message } };
+    }
+  };
+
   // advance search with filters
   advanceSearch = async (params) => {
     try {
@@ -130,24 +228,6 @@ class ApartmentRepository {
         s_washrooms: baths,
       });
 
-      // console.log(params)
-      /* const { data, error } = await supabase
-        .from("Apartment")
-        .select(
-          `
-                *, 
-                location: Location!inner(*),
-                images: ApartmentImages!inner(image_url),
-                facilities: ApartmentFacilities(facility:Facilities(facilities_id, title)), 
-                starpoints: ApartmentStarPoints(starpoint:Starpoints(starpoint_id, title))
-                `
-        )
-        .in("bedrooms", beds)
-        .in("washrooms", baths)
-        .gte("price", price_min)
-        .lte("price", price_max)
-        .gte("area_sqft", area_min)
-        .lte("area_sqft", area_max); */
       if (error) {
         // console.log("Error performing advanced search:", error.message)
         throw error;
