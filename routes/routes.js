@@ -26,6 +26,7 @@ router.use('/fixed-values', fixedValuesRouter);
 router.use('/wishlist', wishlistRouter);
 // recommendation
 router.use('/recommendation', recommendationRouter);
+router.use("/message", messageRouter)
 
 module.exports = router;
 
