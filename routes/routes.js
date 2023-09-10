@@ -13,6 +13,7 @@ const wishlistRouter = require('./wishlist');
 // recommendation
 const recommendationRouter = require('./recomendation');
 const postRouter = require('./post')
+const exploreRouter = require('./explore');
 
 
 router.use('/auth', authRouter);
@@ -29,6 +30,7 @@ router.use('/wishlist', wishlistRouter);
 router.use('/recommendation', recommendationRouter);
 // post
 router.use('/post', postRouter);
+router.use('/explore', exploreRouter)
 
 module.exports = router;
 
