@@ -28,14 +28,14 @@ class ApartmentController {
     console.log("ApartmentController::add");
     const { data, error, code } = await repo.add(req.body);
     
-    if (req.body.apartment.price < 0) {
-      res.status(500).json({
-        error: "Price negative",
-        message: "Price must be greater than 0",
-        code : 500
-      })
-      return
-    }
+    // if (req.body.apartment.price < 0) {
+    //   res.status(500).json({
+    //     error: "Price negative",
+    //     message: "Price must be greater than 0",
+    //     code : 500
+    //   })
+    //   return
+    // }
     
     if (error) {
       res.status(code).json({
@@ -95,9 +95,9 @@ class ApartmentController {
     };
 
     // Check if the beds array contains the number 6
-    if (params.beds.includes(6)) {
+    if (params.beds.includes(5)) {
       // Append numbers 7 to 20 to the beds array
-      for (let i = 7; i <= 20; i++) {
+      for (let i = 6; i <= 20; i++) {
         params.beds.push(i);
       }
     }
