@@ -17,7 +17,7 @@ class ApartmentRepository {
       curr_user_id,
       f_apartment_id,
     });
-    console.log(data);
+    //console.log(data);
 
     if (error) {
       console.log(`ApartmentRepository::findApartmentById:: error: ${error}`);

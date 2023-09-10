@@ -145,6 +145,7 @@ class UserRepository {
         FROM users WHERE id = $1`,
         [id]
       );
+      db.release();
       if(data.rows.length === 0) {
         return {
           success: false,
