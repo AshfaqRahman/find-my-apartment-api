@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const { messageSocket } = require('./services/socketio_chat_service');
 
 const app = express();
 app.use(cors());
@@ -59,6 +60,8 @@ let swaggerDocument = swaggerJsDoc(options);
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
-app.listen(port, () =>  {
+server =app.listen(port, () =>  {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+messageSocket(server);

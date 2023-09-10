@@ -29,6 +29,7 @@ router.use('/wishlist', wishlistRouter);
 router.use('/recommendation', recommendationRouter);
 // post
 router.use('/post', postRouter);
+router.use("/message", messageRouter)
 
 module.exports = router;
 

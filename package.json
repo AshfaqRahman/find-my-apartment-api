@@ -23,6 +23,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
     "pg": "^8.11.2",
+    "socket.io": "^4.7.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   }
