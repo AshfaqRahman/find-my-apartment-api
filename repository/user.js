@@ -134,6 +134,40 @@ class UserRepository {
       return { error: { message: error.message } };
     }
   };
+
+  // get user by id
+  getUserById = async (id) => {
+    console.log("UserRepository::getUserById");
+    try {
+      const db = await getConnection();
+      const  data = await db.query(
+        `SELECT id as user_id, first_name, last_name, email, phone_no, gender
+        FROM users WHERE id = $1`,
+        [id]
+      );
+      if(data.rows.length === 0) {
+        return {
+          success: false,
+          code: 404,
+          message: "User not found",
+        }
+      }
+      //console.log(data.rows[0]);
+      return {
+        data: data.rows[0],
+        success: true,
+        code: 200,
+        message: "User found",
+      }
+    } catch (error) {
+      console.log("UserRepository::getUserById:: error: " + error);
+      return {
+        success: false,
+        code: 500,
+        message: "Internal server error",
+      }
+    }
+  }
 }
 
 // export
