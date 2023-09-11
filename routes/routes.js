@@ -14,6 +14,7 @@ const wishlistRouter = require('./wishlist');
 const recommendationRouter = require('./recomendation');
 const postRouter = require('./post')
 const exploreRouter = require('./explore');
+const zonecardRouter = require('./zonecard');
 
 
 router.use('/auth', authRouter);
@@ -32,6 +33,8 @@ router.use('/recommendation', recommendationRouter);
 router.use('/post', postRouter);
 router.use('/explore', exploreRouter)
 router.use("/message", messageRouter)
+// zonecard
+router.use("/zonecard" , zonecardRouter);
 
 module.exports = router;
 

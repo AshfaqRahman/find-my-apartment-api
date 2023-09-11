@@ -1,14 +1,12 @@
 const { getConnection } = require("../config/database");
 
-class ExploreRepository {
-  fetchApartments = async () => {
-    console.log("PostRepository::fetchAllPosts");
+class ZonecardRepository {
+    fetchZonecardData = async () => {
+    console.log("ZonecardController::fetchZonecardData");
 
     const query = `SELECT *
-      FROM "Apartment"
-      WHERE "occupied" = false
-      ORDER BY "price"
-      LIMIT 5;
+      FROM "Zonecard"
+      LIMIT 4;
       `;
 
     const db = await getConnection();
@@ -21,4 +19,4 @@ class ExploreRepository {
   };
 }
 
-module.exports = ExploreRepository;
+module.exports = ZonecardRepository;
