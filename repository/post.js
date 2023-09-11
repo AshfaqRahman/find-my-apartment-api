@@ -13,9 +13,7 @@ class PostRepository {
         .select();
       if (location.error) throw location.error;
 
-      console.log(
-        "PostRepository::postSubmit:: location inserted successfully"
-      );
+      console.log("PostRepository::postSubmit:: location inserted successfully");
 
       let postParams = params.post_data;
       postParams.location_id = location.data[0].id;
@@ -23,8 +21,7 @@ class PostRepository {
       let postRow = await supabase.from("Post").insert(postParams).select();
       if (postRow.error) throw postRow.error;
 
-      console.log(postParams);
-
+      // console.log(postParams);
       console.log("PostRepository::postSubmit:: post inserted successfully");
       
       const post_id = postRow.data[0].id;
@@ -75,8 +72,6 @@ class PostRepository {
   fetchAllPosts = async () => {
     console.log("PostRepository::fetchAllPosts");
 
-    // let query = `SELECT * FROM "Post"`;
-
     let query = `SELECT "Post".*, "Location".zone, "Location".district, "Location".division, 
     (
         SELECT to_jsonb(array_agg("Facilities".title))
@@ -102,6 +97,115 @@ class PostRepository {
 
     return data.rows;
   };
+
+  fetchFilteredPosts = async (params) => {
+    const query =  `
+    SELECT
+        p.id,
+        p.gender,
+        p.bedrooms,
+        p.bathrooms,
+        p.roommates,
+        p.residents,
+        p.area_sqft,
+        p.price,
+        p.post_owner,
+        p.post_title,
+        p.post_body,
+        (
+            SELECT to_jsonb(array_agg("Facilities".title))
+            FROM "PostFacilities"
+            JOIN "Facilities" ON "PostFacilities".facilities_id = "Facilities".facilities_id
+            WHERE "PostFacilities".post_id = p.id
+        ) as facilities,
+        (
+            SELECT to_jsonb(array_agg("Starpoints".title))
+            FROM "PostStarPoints"
+            JOIN "Starpoints" ON "PostStarPoints".starpoint_id = "Starpoints".starpoint_id
+            WHERE "PostStarPoints".post_id = p.id
+        ) as starpoints,
+        (
+            SELECT jsonb_build_object(
+                'division', l.division,
+                'district', l.district,
+                'zone', l.zone,
+                'street_no', l.street_no,
+                'house_no', l.house_no,
+                'latitude', l.latitude,
+                'longitude', l.longitude,
+                'created_at', l.created_at,
+                'detailed_address', l.detailed_address
+            ) AS location
+            FROM "Location" AS l
+            WHERE l.id = p.location_id
+        ) AS location
+    FROM
+        "Post" as p
+    WHERE
+        p.gender = ANY($1)
+        AND p.bedrooms = ANY($2)
+        AND p.bathrooms = ANY($3)
+        AND p.roommates = ANY($4)
+        AND p.residents = ANY($5)
+        AND p.price >= $6
+        AND p.price <= $7
+        AND p.area_sqft >= $8
+        AND p.area_sqft <= $9
+        AND (p.id IN (
+          SELECT post_id
+          FROM "PostFacilities"
+          WHERE facilities_id = ANY($10)
+          GROUP BY post_id
+          HAVING COUNT(DISTINCT facilities_id) = array_length($10, 1)
+        )
+          OR NOT EXISTS (
+            select 1 
+            from "PostFacilities"
+            where facilities_id = ANY($10)
+          )
+        )
+        AND (p.id IN (
+            SELECT post_id
+            FROM "PostStarPoints"
+
+            WHERE starpoint_id = ANY($11)
+            GROUP BY post_id
+            HAVING COUNT(DISTINCT starpoint_id) = array_length($11, 1)
+        )
+          
+          OR NOT EXISTS (
+            select 1 
+            from "PostStarPoints"
+            where starpoint_id = ANY($11)
+          )
+        )
+    GROUP BY
+        p.id;
+    `;
+    
+    const values = [
+      params.gender,
+      params.beds,
+      params.baths,
+      params.roommates,
+      params.residents,
+      params.price_min,
+      params.price_max,
+      params.area_min,
+      params.area_max,
+      params.facilities,
+      params.keywords
+    ];
+
+    // console.log("fetchFilteredPosts::query: " + values);
+
+    const db = await getConnection();
+    const data = await db.query(query, values);
+
+    db.release();
+
+    return data.rows;
+  }
 }
 
 module.exports = PostRepository;

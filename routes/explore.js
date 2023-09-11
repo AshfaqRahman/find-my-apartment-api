@@ -6,6 +6,6 @@ const { authenticateToken } = require("../config/authorization.js");
 
 const controller = new ExploreController();
 
-router.get('/', authenticateToken, controller.fetchApartments);
+router.get('/', controller.fetchApartments);
 
 module.exports = router;

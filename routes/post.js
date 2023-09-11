@@ -6,7 +6,9 @@ const { authenticateToken } = require("../config/authorization.js");
 
 const controller = new PostController();
 
-router.get('/', authenticateToken, controller.fetchAllPosts);
+// router.get('/', authenticateToken, controller.fetchAllPosts);
+
+router.get("/", authenticateToken, controller.fetchFilteredPosts)
 
 router.post('/', authenticateToken, controller.postSubmit);
 
