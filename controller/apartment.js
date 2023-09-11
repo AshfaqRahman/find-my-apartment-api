@@ -28,14 +28,19 @@ class ApartmentController {
     console.log("ApartmentController::add");
     const { data, error, code } = await repo.add(req.body);
     
-    if (req.body.apartment.price < 0) {
-      res.status(500).json({
-        error: "Price negative",
-        message: "Price must be greater than 0",
-        code : 500
-      })
-      return
+    if (error) {
+      res.status(code).json({
+        message: error,
+        code: code,
+      });
+      return;
     }
+    res.status(200).json(data);
+  };
+
+  edit = async (req, res) => {
+    console.log("ApartmentController::edit");
+    const { data, error, code } = await repo.edit(req.body);
     
     if (error) {
       res.status(code).json({
@@ -95,9 +100,9 @@ class ApartmentController {
     };
 
     // Check if the beds array contains the number 6
-    if (params.beds.includes(6)) {
+    if (params.beds.includes(5)) {
       // Append numbers 7 to 20 to the beds array
-      for (let i = 7; i <= 20; i++) {
+      for (let i = 6; i <= 20; i++) {
         params.beds.push(i);
       }
     }
@@ -163,6 +168,49 @@ class ApartmentController {
     }
     console.log("after filtering with radius: ", filteredData.length);
     res.status(200).json(filteredData);
+  };
+
+  // advance search with filters
+  toggleStatus = async (req, res) => {
+    console.log("ApartmentController::toggleStatus");
+
+    
+    let {data, error} = await repo.toggleStatus(req.body);
+
+    if(error){
+      console.log(`ApartmentController::toggleStatus:: error: ${error}`);
+      res.status(500).json({
+        code : 500,
+        message: error,
+      });
+      return;
+    }
+
+    res.status(200).json(data);
+  };
+
+  // advance search with filters
+  deleteApartment = async (req, res) => {
+    console.log("ApartmentController::deleteApartment");
+
+    let params = {
+      user_id: req.body.user.id,
+      apartment_id: req.query.apartment_id,
+    }
+
+    
+    let {data, error} = await repo.deleteApartment(params);
+
+    if(error){
+      console.log(`ApartmentController::deleteApartment:: error: ${error}`);
+      res.status(500).json({
+        code : 500,
+        message: error,
+      });
+      return;
+    }
+
+    res.status(200).json(data);
   };
 }
 

@@ -19,6 +19,8 @@ const controller = new UserController();
 router.use('/profile', authenticateToken, controller.getUserInfo);
 router.use('/my-preference', myPreferenceRouter);
 router.use('/wishlist', wishlistRouter);
+// api/user/:id
+router.use('/:user_id',authenticateToken, controller.getUserById);
 
 
 /** 

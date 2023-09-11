@@ -36,6 +36,15 @@ class UserController {
     res.status(200).json(data[0]);
   };
 
+  // get user by id
+  // id is given in params
+  getUserById = async (req, res) => {
+    console.log("UserController::getUserById");
+    const result = await repo.getUserById(req.params.user_id);
+    return res.status(result.code).json(result);
+  }
+
+
 }
 
 module.exports = UserController;

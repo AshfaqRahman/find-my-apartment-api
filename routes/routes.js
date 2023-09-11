@@ -31,6 +31,7 @@ router.use('/recommendation', recommendationRouter);
 // post
 router.use('/post', postRouter);
 router.use('/explore', exploreRouter)
+router.use("/message", messageRouter)
 
 module.exports = router;
 
