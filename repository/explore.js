@@ -4,7 +4,12 @@ class ExploreRepository {
   fetchApartments = async () => {
     console.log("PostRepository::fetchAllPosts");
 
-    const query = `SELECT * FROM "Apartment" limit 5`;
+    const query = `SELECT *
+      FROM "Apartment"
+      WHERE "occupied" = false
+      ORDER BY "price"
+      LIMIT 5;
+      `;
 
     const db = await getConnection();
     const data = await db.query(query);
