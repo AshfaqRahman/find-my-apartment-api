@@ -30,7 +30,10 @@ const controller = new RecommendationController();
  *                type: array
  */
 
-router.get('/', authenticateToken , controller.recommendationByPreference);
+// remmendation?wishlist=true&preference=false&search_history=false
+router.get('/', authenticateToken , controller.recommend);
+router.get('/by_wishlist', authenticateToken , controller.recommendationByWishList)
+router.get("/by_preference", authenticateToken , controller.recommendationByPreference)
 
 
 module.exports = router;

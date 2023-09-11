@@ -1,4 +1,6 @@
 const { getConnection } = require("../config/database");
+// import supabase
+const supabase = require("../config/supabase");
 
 class RecommendationRepository{
   recommendationByPreference = async (user_id) => {
@@ -89,12 +91,45 @@ class RecommendationRepository{
 
     // db query
     const db = await getConnection();
-    const data = await db.query(query, [user_id]);
-
-    db.release();
-
-    return {data: data.rows};
+    try{
+        
+        const data = await db.query(query, [user_id]);
+        db.release();
+        return {
+            success: true,
+            code: 200,
+            data: data.rows
+        }
+    }catch(e){
+        db.release();
+        return {
+            success: false,
+            code: 500,
+            message: e.message
+        };
+    }
   };
+
+    // call supabase rpc recommendationByWishList which has parameter user_id
+    recommendataionByWishList = async (user_id) => {
+        let { data, error } = await supabase
+            .rpc('recommendationbywishlist', {
+                user_id
+            })
+
+        if (error) {
+            return {
+                success: false,
+                code: 500,
+                message: error.message
+            }
+        }
+        return {
+            success: true,
+            code: 200,
+            data: data
+        }
+    }
 };
 
 module.exports = RecommendationRepository;
