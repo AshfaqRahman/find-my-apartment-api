@@ -92,8 +92,8 @@ class ApartmentController {
           : req.query.baths.map((bath) => parseInt(bath)), // 5+
       price_min: +req.query.price_min,
       price_max: +req.query.price_max,
-      area_min: +req.query.area_min,
-      area_max: +req.query.area_max,
+      area_min: req.query.area_min === undefined ? 0 : +req.query.area_min,
+      area_max: req.query.area_max === undefined ? 10000000 : +req.query.area_max,
       facilities:
         req.query.facilities === undefined ? [] : req.query.facilities,
       keywords: req.query.keywords === undefined ? [] : req.query.keywords,
