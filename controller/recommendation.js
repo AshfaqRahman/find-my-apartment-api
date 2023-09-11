@@ -3,22 +3,42 @@ const repo = new RecommendationRepository();
 
 class RecommendationController{
   recommendationByPreference= async(req, res) => {
-    console.log("RecommendationController::recommendationByPreference");
-
     const user_id = req.body.user.id;
-    const {data, error, code} = await repo.recommendationByPreference(user_id);
+    const result = await repo.recommendationByPreference(user_id);
+    return res.status(result.code).json(result);
+  };
 
-    if(error){
-      console.log(`RecommendationController::recommendationByPreference:: error: ${error}`);
-      res.status(code).json({
-        code : code,
-        message: error,
-      });
-      return;
+  recommendationByWishList = async(req, res) => {
+    const user_id = req.body.user.id;
+    const result = await repo.recommendationByWishList(user_id);
+    return res.status(result.code).json(result);
+  };
+
+  // recommendation by wishlist
+  recommend = async (req, res) => {
+    const user_id = req.body.user.id;
+    // get the query params
+    const isWishList = req.query.wishlist;
+    const isPreference = req.query.preference;
+    var result = null;
+    if(isPreference && isPreference === 'true'){
+      result = await repo.recommendationByPreference(user_id);
     }
 
-    res.status(200).json(data);
+    if(isWishList && isWishList === 'true'){
+      result = await repo.recommendationByWishList(user_id);
+    }
+    if(result){
+      return res.status(result.code).json(result);
+    }else{
+      return {
+        success: false,
+        code: 500,
+        message: "Invalid query params"
+      }
+    }
   };
+
 }
 
 module.exports = RecommendationController;
