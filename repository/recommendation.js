@@ -111,10 +111,10 @@ class RecommendationRepository{
   };
 
     // call supabase rpc recommendationByWishList which has parameter user_id
-    recommendataionByWishList = async (user_id) => {
+    recommendationByWishList = async (curr_user_id) => {
         let { data, error } = await supabase
             .rpc('recommendationbywishlist', {
-                user_id
+                curr_user_id
             })
 
         if (error) {
@@ -129,6 +129,29 @@ class RecommendationRepository{
             code: 200,
             data: data
         }
+    }
+
+    // call supbase rpc recommendationbyzone which has parameter curr_user_id
+    recommendationByZone = async (curr_user_id) => {
+
+        let { data, error } = await supabase
+            .rpc('recommendationbyzone', {
+                curr_user_id
+            })
+
+        if (error) {
+            return {
+                success: false,
+                code: 500,
+                message: error.message
+            }
+        }
+        return {
+            success: true,
+            code: 200,
+            data: data
+        }
+
     }
 };
 
