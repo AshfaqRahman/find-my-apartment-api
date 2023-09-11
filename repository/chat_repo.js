@@ -92,6 +92,7 @@ class MessageRepository {
             ) AND m1.sent_time = m2.last_sent_time
             WHERE m1.sender_id = $1
             OR m1.receiver_id = $1
+            ORDER BY sent_time DESC
             `;
 
             const db = await getConnection();
