@@ -65,9 +65,14 @@ function messageSocket(server){
                 console.log("receiver:", data.receiver_id, "socketId", receiverSocketId);
                 if (receiverSocketId !== undefined){
                     io.to(receiverSocketId).emit(RECEIVE_MESSAGE, data); //https://socket.io/docs/v3/emit-cheatsheet/
-                    io.to(senderSocketId).emit(RECEIVE_MESSAGE, data); //https://socket.io/docs/v3/emit-cheatsheet/
+                     //https://socket.io/docs/v3/emit-cheatsheet/
                     console.log("sent message to receiver");
                 }
+
+                if(senderSocketId !== undefined){
+                    io.to(senderSocketId).emit(RECEIVE_MESSAGE, data);
+                    console.log("sent message to sender");
+                }   
             }
         });
     });
