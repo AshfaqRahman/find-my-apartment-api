@@ -244,7 +244,7 @@ class ApartmentRepository {
   };
 
   advanceSearchQuery = async (params) => {
-    const query = `
+    let query = `
     SELECT
         a.id,
         a.bedrooms,
@@ -340,7 +340,7 @@ class ApartmentRepository {
         a.id;
   `;
 
-    const values = [
+    let values = [
       params.user_id,
       params.beds,
       params.baths,
@@ -357,13 +357,28 @@ class ApartmentRepository {
 
     // db query
     const db = await getConnection();
-    const data = await db.query(query, values);
+    
+    let data = await db.query(query, values);
+    const rows = data.rows;
+    query = `
+    insert into
+      "SearchHistory" (user_id, zone)
+    values
+      ($1, $2)
+    `;
+    values = [
+      params.user_id,
+      params.zone,
+    ]
 
-    console.log(data.facilitiesCount);
+    data = await db.query(query, values);
+
+
+    // console.log(data.facilitiesCount);
 
     db.release();
 
-    return data.rows;
+    return rows;
   };
 
   getApartmentByUser = async (user_id) => {

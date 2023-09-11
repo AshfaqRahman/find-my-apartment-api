@@ -72,6 +72,7 @@ class ApartmentController {
 
     // js object
     const params = {
+      zone: req.query.zone,
       user_id: req.body.user.id,
       apartmentTypes:
         req.query.apartmentTypes === undefined
